@@ -19,8 +19,8 @@ const userSchema = new mongoose.Schema({
 
     profile: {
         name: String,
-        gender: String,
-        location: String,
+        gender: { type: String, default: 'Male' },
+        location: { type: String, default: 'Hong Kong' },
         website: String,
         picture: String
     }

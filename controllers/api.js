@@ -14,6 +14,7 @@ const foursquare = require('node-foursquare')({
     }
 });
 
+// Sign Up
 exports.postSignup = (req, res) => {
     req.assert('email', 'Email is not valid').isEmail();
     req.assert('password', 'Password must be at least 4 characters long').len(4);
@@ -37,9 +38,7 @@ exports.postSignup = (req, res) => {
     });
 
     User.findOne({email: req.body.email}, (err, existingUser) => {
-        if (err) {
-            console.log(err);
-        }
+        if (err) console.log(err);
 
         if (existingUser) {
             return res.json({
@@ -70,6 +69,7 @@ exports.postSignup = (req, res) => {
     });
 };
 
+// Log in
 exports.postLogin = (req, res) => {
     req.assert('email', 'Email is not valid').isEmail();
     req.assert('password', 'Password cannot be blank').notEmpty();
@@ -87,9 +87,7 @@ exports.postLogin = (req, res) => {
     }
 
     passport.authenticate('local', (err, user, info) => {
-        if (err) {
-            console.log(err);
-        }
+        if (err) console.log(err);
 
         if (!user) {
             return res.json({
@@ -115,17 +113,16 @@ exports.postLogin = (req, res) => {
     })(req, res);
 };
 
+// Account Profile
 exports.getAccount = (req, res) => {
-    passport.authenticate('jwt', {session: false}, (err, user, info) => {
-        if (err) {
-            console.log(err);
-        }
+    passport.authenticate('jwt', (err, user, info) => {
+        if (err) console.log(err);
 
         if (!user) {
             return res.json({
                 status: {
                     type: "error",
-                    message: info.msg
+                    message: info.msg || "UnAuthorization"
                 }
             });
         }
@@ -136,7 +133,8 @@ exports.getAccount = (req, res) => {
                 message: 'success'
             },
             userProfile: user.profile
-        })
+        });
+
     })(req, res);
 };
 
