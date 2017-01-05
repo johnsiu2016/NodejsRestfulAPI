@@ -1,5 +1,9 @@
 'use strict';
 
+const User = require('../models/User');
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+
 const async = require('async');
 const graph = require('fbgraph');
 const foursquare = require('node-foursquare')({
@@ -9,6 +13,132 @@ const foursquare = require('node-foursquare')({
         redirectUrl: process.env.FOURSQUARE_REDIRECT_URL
     }
 });
+
+exports.postSignup = (req, res) => {
+    req.assert('email', 'Email is not valid').isEmail();
+    req.assert('password', 'Password must be at least 4 characters long').len(4);
+    req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+    req.sanitize('email').normalizeEmail({remove_dots: false});
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        return res.json({
+            status: {
+                type: "error",
+                message: errors
+            }
+        });
+    }
+
+    const user = new User({
+        email: req.body.email,
+        password: req.body.password
+    });
+
+    User.findOne({email: req.body.email}, (err, existingUser) => {
+        if (err) {
+            console.log(err);
+        }
+
+        if (existingUser) {
+            return res.json({
+                status: {
+                    type: "error",
+                    message: 'Account with that email address already exists.'
+                }
+            });
+        }
+
+        user.save((err) => {
+            if (err) {
+                console.log(err);
+            }
+
+            const jwtToken = jwt.sign({
+                id: user.id
+            }, process.env.JWTSECRET);
+
+            return res.json({
+                status: {
+                    type: "success",
+                    message: 'Successfully signed up'
+                },
+                token: jwtToken
+            });
+        });
+    });
+};
+
+exports.postLogin = (req, res) => {
+    req.assert('email', 'Email is not valid').isEmail();
+    req.assert('password', 'Password cannot be blank').notEmpty();
+    req.sanitize('email').normalizeEmail({remove_dots: false});
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        return res.json({
+            status: {
+                type: "error",
+                message: errors
+            }
+        });
+    }
+
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            console.log(err);
+        }
+
+        if (!user) {
+            return res.json({
+                status: {
+                    type: "error",
+                    message: info.msg
+                }
+            });
+        }
+
+        const jwtToken = jwt.sign({
+            id: user.id
+        }, process.env.JWTSECRET);
+
+        return res.json({
+            status: {
+                type: "success",
+                message: 'Successfully logged in.'
+            },
+            token: jwtToken
+        });
+
+    })(req, res);
+};
+
+exports.getAccount = (req, res) => {
+    passport.authenticate('jwt', {session: false}, (err, user, info) => {
+        if (err) {
+            console.log(err);
+        }
+
+        if (!user) {
+            return res.json({
+                status: {
+                    type: "error",
+                    message: info.msg
+                }
+            });
+        }
+
+        res.json({
+            status: {
+                type: "success",
+                message: 'success'
+            },
+            userProfile: user.profile
+        })
+    })(req, res);
+};
 
 /**
  * GET /api

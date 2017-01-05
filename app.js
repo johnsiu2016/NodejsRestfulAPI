@@ -84,7 +84,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-    if (req.path === '/api/upload') {
+    if (req.path.match(/\/api\/\w*/)) {
         next();
     } else {
         lusca.csrf()(req, res, next);
@@ -134,6 +134,11 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 /**
  * API examples routes.
  */
+
+app.post('/api/signup', apiController.postSignup);
+app.post('/api/login', apiController.postLogin);
+app.get('/api/account', apiController.getAccount);
+
 app.get('/api', apiController.getApi);
 app.get('/api/aviary', apiController.getAviary);
 app.get('/api/foursquare', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFoursquare);
@@ -170,6 +175,7 @@ app.use(errorHandler());
 /**
  * Start Express server.
  */
+
 app.listen(app.get('port'), () => {
     console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
     console.log('  Press CTRL-C to stop\n');

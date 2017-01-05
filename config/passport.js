@@ -6,6 +6,9 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+
 const User = require('../models/User');
 
 passport.serializeUser((user, done) => {
@@ -18,6 +21,24 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+passport.use(new JwtStrategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeader(),
+    secretOrKey: process.env.JWTSECRET
+
+}, function(jwt_payload, done) {
+    User.findOne({_id: jwt_payload.id}, function(err, user) {
+        if (err) {
+            return done(err, false);
+        }
+
+        if (user) {
+            return done(null, user);
+        } else {
+            return done(null, false, {msg: 'ID from JWT payload is not found.'});
+        }
+    });
+}));
+
 /**
  * Sign in using Email and Password.
  */
@@ -27,7 +48,7 @@ passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done)
             return done(err);
         }
         if (!user) {
-            return done(null, false, {msg: `Email ${email} not found.`});
+            return done(null, false, {msg: 'Invalid email or password.'});
         }
         user.comparePassword(password, (err, isMatch) => {
             if (err) {
