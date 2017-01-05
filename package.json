@@ -3,7 +3,7 @@
   "description": "App Server Proj1",
   "author": "John",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "test": "mocha --reporter spec"
   },
   "dependencies": {
