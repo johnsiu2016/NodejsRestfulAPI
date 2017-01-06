@@ -3,6 +3,7 @@
 const User = require('../models/User');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const sharp = require('sharp');
 
 const async = require('async');
 const graph = require('fbgraph');
@@ -132,10 +133,98 @@ exports.getAccount = (req, res) => {
                 type: "success",
                 message: 'success'
             },
+            email: user.email,
             userProfile: user.profile
         });
 
     })(req, res);
+};
+
+const multer = require('multer');
+const crypto = require('crypto');
+const path = require('path');
+const fs = require('fs');
+
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, path.join(process.cwd(), 'uploads'));
+        },
+        filename: function (req, file, cb) {
+            const extension = path.extname(file.originalname).toLowerCase();
+            const name = crypto.createHash('md5').update(`${file.originalname}${Date.now()}`).digest('hex').toLowerCase();
+            cb(null, `${name}${extension}`);
+        }
+    }),
+    fileFilter: function (req, file, cb) {
+        const allowFiletypes = /jpeg|jpg|png/;
+        const isAllowMimetype = allowFiletypes.test(file.mimetype);
+        const isAllowExtension = allowFiletypes.test(path.extname(file.originalname).toLowerCase());
+
+        if (isAllowMimetype && isAllowExtension) {
+            return cb(null, true);
+        }
+
+        cb(`File upload only supports the following file types - ${allowFiletypes}`);
+    },
+    limits: {
+        fileSize: 5 * 100000
+    }
+});
+
+exports.postFileUpload = (req, res) => {
+    upload.single('myFile')(req, res, (err) => {
+        // This err is multer specific one, which sucks.
+        if (err) {
+            let message = "";
+            // This err code is multer itself implementation, which is funny
+            if (err.code === "LIMIT_FILE_SIZE") {
+                message = "File size > 5MB"
+            } else {
+                // This is the message I passed from the above cb
+                message = err;
+            }
+
+            return res.json({
+                status: {
+                    type: "error",
+                    message: message
+                }
+            });
+        }
+
+        const width = Number(req.body.width) || 320;
+        const height = Number(req.body.height) || 240;
+
+        const tmp = req.file.path.split(".");
+        const outputPath = `${tmp[0]}_${width}_${height}_${Date.now()}.${tmp[1]}`;
+
+        sharp.cache(false);
+        sharp(req.file.path).resize(width, height).toFile(outputPath, (err, info) => {
+            if (err) {
+                return res.json({
+                    status: {
+                        type: "error",
+                        message: err
+                    },
+                    info: info
+                });
+            }
+
+            fs.unlink(req.file.path, (err) => {
+                if (err) console.log(err);
+                const imageURL = `${req.protocol}://${req.get('host')}/uploads/${path.parse(outputPath).base}`;
+                console.log(imageURL);
+                return res.json({
+                    status: {
+                        type: "success",
+                        message: 'success'
+                    },
+                    imageURL: imageURL
+                });
+            });
+        });
+    });
 };
 
 /**
@@ -217,15 +306,15 @@ exports.getAviary = (req, res) => {
  * File Upload API example.
  */
 
-exports.getFileUpload = (req, res) => {
-    res.render('api/upload', {
+exports.getFileUploadWeb = (req, res) => {
+    res.render('api/uploadWeb', {
         title: 'File Upload'
     });
 };
 
-exports.postFileUpload = (req, res) => {
+exports.postFileUploadWeb = (req, res) => {
     req.flash('success', {msg: 'File was uploaded successfully.'});
-    res.redirect('/api/upload');
+    res.redirect('/api/uploadWeb');
 };
 
 exports.getGoogleMaps = (req, res) => {

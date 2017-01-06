@@ -18,9 +18,6 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
-const multer = require('multer');
-
-const upload = multer({dest: path.join(__dirname, 'uploads')});
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -109,6 +106,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.static(path.join(__dirname, 'public'), {maxAge: 31557600000}));
+app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 
 /**
  * Primary app routes.
@@ -138,13 +136,14 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 app.post('/api/signup', apiController.postSignup);
 app.post('/api/login', apiController.postLogin);
 app.get('/api/account', apiController.getAccount);
+app.post('/api/upload', apiController.postFileUpload);
 
 app.get('/api', apiController.getApi);
 app.get('/api/aviary', apiController.getAviary);
 app.get('/api/foursquare', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFoursquare);
 app.get('/api/facebook', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
-app.get('/api/upload', apiController.getFileUpload);
-app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
+app.get('/api/uploadWeb', apiController.getFileUploadWeb);
+app.post('/api/uploadWeb', apiController.postFileUploadWeb);
 app.get('/api/google-maps', apiController.getGoogleMaps);
 
 /**
