@@ -4,6 +4,8 @@ const User = require('../models/User');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const sharp = require('sharp');
+const myUtil = require('../myUtil');
+const apiOutputTemplate = myUtil.apiOutputTemplate;
 
 const async = require('async');
 const graph = require('fbgraph');
@@ -25,12 +27,7 @@ exports.postSignup = (req, res) => {
     const errors = req.validationErrors();
 
     if (errors) {
-        return res.json({
-            status: {
-                type: "error",
-                message: errors
-            }
-        });
+        return res.json(apiOutputTemplate("error", errors));
     }
 
     const user = new User({
@@ -42,12 +39,7 @@ exports.postSignup = (req, res) => {
         if (err) console.log(err);
 
         if (existingUser) {
-            return res.json({
-                status: {
-                    type: "error",
-                    message: 'Account with that email address already exists.'
-                }
-            });
+            return res.json(apiOutputTemplate("error", 'Account with that email address already exists.'));
         }
 
         user.save((err) => {
@@ -59,13 +51,7 @@ exports.postSignup = (req, res) => {
                 id: user.id
             }, process.env.JWTSECRET);
 
-            return res.json({
-                status: {
-                    type: "success",
-                    message: 'Successfully signed up'
-                },
-                token: jwtToken
-            });
+            return res.json(apiOutputTemplate("success", 'Successfully signed up', {token: jwtToken}));
         });
     });
 };
@@ -79,67 +65,35 @@ exports.postLogin = (req, res) => {
     const errors = req.validationErrors();
 
     if (errors) {
-        return res.json({
-            status: {
-                type: "error",
-                message: errors
-            }
-        });
+        return res.json(apiOutputTemplate("error", errors));
     }
 
     passport.authenticate('local', (err, user, info) => {
         if (err) console.log(err);
 
         if (!user) {
-            return res.json({
-                status: {
-                    type: "error",
-                    message: info.msg
-                }
-            });
+            return res.json(apiOutputTemplate("error", info.msg));
         }
 
         const jwtToken = jwt.sign({
             id: user.id
         }, process.env.JWTSECRET);
 
-        return res.json({
-            status: {
-                type: "success",
-                message: 'Successfully logged in.'
-            },
-            token: jwtToken
-        });
+        return res.json(apiOutputTemplate("success", "Successfully logged in.", {token: jwtToken}));
 
     })(req, res);
 };
 
 // Account Profile
 exports.getAccount = (req, res) => {
-    passport.authenticate('jwt', (err, user, info) => {
-        if (err) console.log(err);
-
-        if (!user) {
-            return res.json({
-                status: {
-                    type: "error",
-                    message: info.msg || "UnAuthorization"
-                }
-            });
-        }
-
-        res.json({
-            status: {
-                type: "success",
-                message: 'success'
-            },
-            email: user.email,
-            userProfile: user.profile
-        });
-
-    })(req, res);
+    const data = {
+        email: req.user.email,
+        userProfile: req.user.profile
+    };
+    return res.json(apiOutputTemplate("success", "success", data));
 };
 
+// File upload
 const multer = require('multer');
 const crypto = require('crypto');
 const path = require('path');
@@ -185,12 +139,7 @@ exports.postFileUpload = (req, res) => {
                 message = err;
             }
 
-            return res.json({
-                status: {
-                    type: "error",
-                    message: message
-                }
-            });
+            return res.json(apiOutputTemplate("error", message));
         }
 
         const width = Number(req.body.width) || 320;
@@ -202,26 +151,14 @@ exports.postFileUpload = (req, res) => {
         sharp.cache(false);
         sharp(req.file.path).resize(width, height).toFile(outputPath, (err, info) => {
             if (err) {
-                return res.json({
-                    status: {
-                        type: "error",
-                        message: err
-                    },
-                    info: info
-                });
+                return res.json(apiOutputTemplate("error", err, {info: info}));
             }
 
             fs.unlink(req.file.path, (err) => {
                 if (err) console.log(err);
                 const imageURL = `${req.protocol}://${req.get('host')}/uploads/${path.parse(outputPath).base}`;
-                console.log(imageURL);
-                return res.json({
-                    status: {
-                        type: "success",
-                        message: 'success'
-                    },
-                    imageURL: imageURL
-                });
+
+                return res.json(apiOutputTemplate("success", 'success', {imageURL: imageURL}));
             });
         });
     });

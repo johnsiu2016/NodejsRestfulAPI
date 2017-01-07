@@ -9,7 +9,6 @@ const logger = require('morgan');
 const chalk = require('chalk');
 const errorHandler = require('errorhandler');
 const lusca = require('lusca');
-const dotenv = require('dotenv');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('express-flash');
 const path = require('path');
@@ -19,10 +18,6 @@ const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 
-/**
- * Load environment variables from .env file, where API keys and passwords are configured.
- */
-dotenv.load({path: '.env'});
 
 /**
  * Controllers (route handlers).
@@ -106,7 +101,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.static(path.join(__dirname, 'public'), {maxAge: 31557600000}));
-app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(process.cwd(), 'uploads')));
 
 /**
  * Primary app routes.
@@ -133,10 +128,28 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  * API examples routes.
  */
 
-app.post('/api/signup', apiController.postSignup);
-app.post('/api/login', apiController.postLogin);
-app.get('/api/account', apiController.getAccount);
-app.post('/api/upload', apiController.postFileUpload);
+const api = express.Router();
+// route = api/signup, ..., etc
+api.post('/signup' ,apiController.postSignup);
+api.post('/login', apiController.postLogin);
+api.get('/account', passport.authenticate('jwt', { failWithError: true }), apiController.getAccount);
+api.post('/upload', passport.authenticate('jwt', { failWithError: true }), apiController.postFileUpload);
+app.use('/api', api);
+api.use(handleAPIError);
+
+const myUtil = require('./myUtil');
+function handleAPIError(err, req, res, next) {
+    let message = "";
+    switch (err.status) {
+        case 401:
+            message = "Unauthorized: JWT is not correct";
+            break;
+        default:
+            message = "Unknown error"
+    }
+
+    return res.json(myUtil.apiOutputTemplate("error", message));
+}
 
 app.get('/api', apiController.getApi);
 app.get('/api/aviary', apiController.getAviary);
