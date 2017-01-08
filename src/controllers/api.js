@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const sharp = require('sharp');
 const myUtil = require('../myUtil');
 const apiOutputTemplate = myUtil.apiOutputTemplate;
+const createDirIfNotExists = myUtil.createDirIfNotExists;
 
 const async = require('async');
 const graph = require('fbgraph');
@@ -135,6 +136,10 @@ const multer = require('multer');
 const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
+
+createDirIfNotExists(process.cwd() + '/uploads', (err) => {
+    if (err) console.log(err);
+});
 
 const upload = multer({
     storage: multer.diskStorage({
