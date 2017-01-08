@@ -133,6 +133,7 @@ const api = express.Router();
 api.post('/signup' ,apiController.postSignup);
 api.post('/login', apiController.postLogin);
 api.get('/account', passport.authenticate('jwt', { failWithError: true }), apiController.getAccount);
+api.post('/account/profile', passport.authenticate('jwt', { failWithError: true }), apiController.postUpdateProfile);
 api.post('/upload', passport.authenticate('jwt', { failWithError: true }), apiController.postFileUpload);
 app.use('/api', api);
 api.use(handleAPIError);
@@ -145,7 +146,9 @@ function handleAPIError(err, req, res, next) {
             message = "Unauthorized: JWT is not correct";
             break;
         default:
+            console.log(err);
             message = "Unknown error"
+            break;
     }
 
     return res.json(myUtil.apiOutputTemplate("error", message));

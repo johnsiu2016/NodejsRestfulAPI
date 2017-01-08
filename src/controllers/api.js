@@ -19,78 +19,115 @@ const foursquare = require('node-foursquare')({
 
 // Sign Up
 exports.postSignup = (req, res) => {
-    req.assert('email', 'Email is not valid').isEmail();
-    req.assert('password', 'Password must be at least 4 characters long').len(4);
-    req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-    req.sanitize('email').normalizeEmail({remove_dots: false});
+    const validationSchema = {
+        "email": {
+            notEmpty: {
+                errorMessage: "Email cannot be blank."
+            },
+            isEmail: {
+                errorMessage: "Please enter a valid email address."
+            }
+        },
+        "password": {
+            notEmpty: {
+                errorMessage: "Password cannot be blank."
+            },
+            isLength: {
+                options: [{min: 6, max: 100}],
+                errorMessage: "Password must be at least 6 characters long"
+            }
+        },
+        "confirmPassword": {
+            notEmpty: {
+                errorMessage: "Password cannot be blank."
+            },
+            equals: {
+                options: [req.body.password],
+                errorMessage: "confirmPassword does not match"
+            }
+        }
+    };
 
-    const errors = req.validationErrors();
+    req.checkBody(validationSchema);
+    req.getValidationResult().then(function (result) {
+        const errors = result.array();
 
-    if (errors) {
-        return res.json(apiOutputTemplate("error", errors));
-    }
-
-    const user = new User({
-        email: req.body.email,
-        password: req.body.password
-    });
-
-    User.findOne({email: req.body.email}, (err, existingUser) => {
-        if (err) console.log(err);
-
-        if (existingUser) {
-            return res.json(apiOutputTemplate("error", 'Account with that email address already exists.'));
+        if (!result.isEmpty()) {
+            return res.json(apiOutputTemplate("error", errors));
         }
 
-        user.save((err) => {
-            if (err) {
-                console.log(err);
+        const user = new User({
+            email: req.body.email,
+            password: req.body.password
+        });
+
+        User.findOne({email: req.body.email}, (err, existingUser) => {
+            if (err) console.log(err);
+
+            if (existingUser) {
+                return res.json(apiOutputTemplate("error", 'Account with that email address already exists.'));
             }
 
-            const jwtToken = jwt.sign({
-                id: user.id
-            }, process.env.JWTSECRET);
+            user.save((err) => {
+                if (err) {
+                    console.log(err);
+                }
 
-            return res.json(apiOutputTemplate("success", 'Successfully signed up', {token: jwtToken}));
+                const jwtToken = jwt.sign({
+                    id: user.id
+                }, process.env.JWTSECRET);
+
+                return res.json(apiOutputTemplate("success", 'Successfully signed up', {token: jwtToken}));
+            });
         });
     });
 };
 
 // Log in
 exports.postLogin = (req, res) => {
-    req.assert('email', 'Email is not valid').isEmail();
-    req.assert('password', 'Password cannot be blank').notEmpty();
-    req.sanitize('email').normalizeEmail({remove_dots: false});
+    const validationSchema = {
+        "email": {
+            notEmpty: {
+                errorMessage: "Email cannot be blank."
+            },
+            isEmail: {
+                errorMessage: "Please enter a valid email address."
+            }
+        },
+        "password": {
+            notEmpty: {
+                errorMessage: "Password cannot be blank."
+            },
+            isLength: {
+                options: [{min: 6, max: 100}],
+                errorMessage: "Password must be at least 6 characters long"
+            }
+        }
+    };
 
-    const errors = req.validationErrors();
+    req.checkBody(validationSchema);
+    req.getValidationResult().then(function (result) {
+        const errors = result.array();
 
-    if (errors) {
-        return res.json(apiOutputTemplate("error", errors));
-    }
-
-    passport.authenticate('local', (err, user, info) => {
-        if (err) console.log(err);
-
-        if (!user) {
-            return res.json(apiOutputTemplate("error", info.msg));
+        if (!result.isEmpty()) {
+            return res.json(apiOutputTemplate("error", errors));
         }
 
-        const jwtToken = jwt.sign({
-            id: user.id
-        }, process.env.JWTSECRET);
+        passport.authenticate('local', (err, user, info) => {
+            if (err) console.log(err);
 
-        return res.json(apiOutputTemplate("success", "Successfully logged in.", {token: jwtToken}));
+            if (!user) {
+                return res.json(apiOutputTemplate("error", info.msg));
+            }
 
-    })(req, res);
-};
+            const jwtToken = jwt.sign({
+                id: user.id
+            }, process.env.JWTSECRET);
 
-// Account Profile
-exports.getAccount = (req, res) => {
-    const data = {
-        email: req.user.email,
-        userProfile: req.user.profile
-    };
-    return res.json(apiOutputTemplate("success", "success", data));
+            return res.json(apiOutputTemplate("success", "Successfully logged in.", {token: jwtToken}));
+
+        })(req, res);
+    });
 };
 
 // File upload
@@ -159,6 +196,105 @@ exports.postFileUpload = (req, res) => {
                 const imageURL = `${req.protocol}://${req.get('host')}/uploads/${path.parse(outputPath).base}`;
 
                 return res.json(apiOutputTemplate("success", 'success', {imageURL: imageURL}));
+            });
+        });
+    });
+};
+
+// Get Account Profile
+exports.getAccount = (req, res) => {
+    const data = {
+        email: req.user.email,
+        userProfile: req.user.profile
+    };
+    return res.json(apiOutputTemplate("success", "success", data));
+};
+
+// Update Account Profile
+exports.postUpdateProfile = (req, res) => {
+
+    req.sanitize('name').escape();
+    req.sanitize('name').trim();
+    req.sanitize('location').escape();
+    req.sanitize('location').trim();
+
+    const validationSchema = {
+        "email": {
+            optional: true,
+            isEmail: {
+                errorMessage: "Please enter a valid email address."
+            }
+        },
+        "name": {
+            optional: true,
+            isLength: {
+                options: [{max: 15}],
+                errorMessage: "The length of name should not exceed 15 characters"
+            }
+        },
+        "gender": {
+            optional: true,
+            isIn: {
+                options: [['male', 'female', 'other']],
+                errorMessage: `Gender should only be one of the [${['male', 'female', 'other'].toString()}]`
+            }
+        },
+        "location": {
+            optional: true,
+            isLength: {
+                options: [{max: 150}],
+                errorMessage: "The length of location should not exceed 150 characters"
+            },
+        },
+        "phone": {
+            optional: true,
+            isNumeric: {
+                errorMessage: "Phone should only contains number"
+            },
+            isLength: {
+                options: [{max: 11}],
+                errorMessage: "The length of phone should not exceed 11 characters"
+            }
+        },
+        "website": {
+            optional: true,
+            isURL: {
+                errorMessage: "Please enter a URL."
+            },
+            isLength: {
+                options: [{max: 150}],
+                errorMessage: "The length of website should not exceed 150 characters"
+            }
+        }
+    };
+
+    req.checkBody(validationSchema);
+    req.getValidationResult().then(function (result) {
+        const errors = result.array();
+
+        if (!result.isEmpty()) {
+            return res.json(apiOutputTemplate("error", errors));
+        }
+
+        User.findById(req.user.id, (err, user) => {
+            if (err) console.log(err);
+
+            user.email = req.body.email || user.email;
+            user.profile.name = req.body.name || user.profile.name;
+            user.profile.gender = req.body.gender || user.profile.gender;
+            user.profile.location = req.body.location || user.profile.location;
+            user.profile.phone = req.body.phone || user.profile.phone;
+            user.profile.website = req.body.website || user.profile.website;
+
+            user.save((err) => {
+                if (err) {
+                    if (err.code === 11000) {
+                        return res.json(apiOutputTemplate("error", 'The email address you have entered is already associated with an account.'));
+                    }
+                    console.log(err);
+                }
+
+                return res.json(apiOutputTemplate("success", 'Profile information has been updated.'));
             });
         });
     });
