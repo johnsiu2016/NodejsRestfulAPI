@@ -168,7 +168,11 @@ const upload = multer({
     }
 });
 
-exports.postFileUpload = (req, res) => {
+exports.postFile = (req, res) => {
+    if (req.user.profile.pictures.length >= 8) {
+        return res.json(apiOutputTemplate("error", "profile.picture exceeds the limit of 8"));
+    }
+
     upload.single('myFile')(req, res, (err) => {
         // This err is multer specific one, which sucks.
         if (err) {
@@ -200,8 +204,72 @@ exports.postFileUpload = (req, res) => {
                 if (err) console.log(err);
                 const imageURL = `${req.protocol}://${req.get('host')}/uploads/${path.parse(outputPath).base}`;
 
-                return res.json(apiOutputTemplate("success", 'success', {imageURL: imageURL}));
+                const user = req.user;
+                const profile = req.user.profile;
+
+                if (!profile.avatar) {
+                    profile.avatar = imageURL;
+                }
+                user.profile.pictures.push(imageURL);
+
+                user.save((err) => {
+                    if (err) return res.json(apiOutputTemplate("error", err.errors['profile.pictures'].message));
+
+                    return res.json(apiOutputTemplate("success", 'success', {imageURL: imageURL}));
+                });
             });
+        });
+    });
+};
+
+exports.deleteFile = (req, res) => {
+    if (!Array.isArray(req.body.pictures)) {
+        req.body.pictures = [req.body.pictures];
+    }
+
+    const validationSchema = {
+        "pictures": {
+            optional: true,
+            arrayIsIn: {
+                options: [req.user.profile.pictures],
+                errorMessage: `The deleting pictures should only be one of the URL of its profile pictures list [${req.user.profile.pictures.toString()}]`
+            }
+        }
+    };
+
+    req.checkBody(validationSchema);
+    req.getValidationResult().then(function (result) {
+        const errors = result.array();
+
+        if (!result.isEmpty()) {
+            return res.json(apiOutputTemplate("error", errors));
+        }
+
+        let user = req.user;
+        let profile = req.user.profile;
+        let body = req.body;
+
+        body.pictures.forEach((picture) => {
+            const dirName = path.join(process.cwd(), 'uploads');
+            const fileName = path.parse(picture).base;
+            const filePath = path.join(dirName, fileName);
+
+            fs.unlink(filePath, (err) => {
+                if (err) console.log(err);
+            });
+        });
+
+        profile.pictures = profile.pictures.filter((picture) => body.pictures.indexOf(picture) < 0);
+
+        const avatarIndex = body.pictures.indexOf(profile.avatar);
+        if (avatarIndex >= 0) {
+            profile.avatar = profile.pictures[0];
+        }
+
+        user.save((err) => {
+            if (err) console.log(err);
+
+            return res.json(apiOutputTemplate("success", "Pictures has been deleted from user.", {profile: {pictures: profile.pictures}}));
         });
     });
 };
@@ -267,8 +335,18 @@ exports.postUpdateProfile = (req, res) => {
                 errorMessage: "Please enter a URL."
             },
             isLength: {
-                options: [{max: 150}],
-                errorMessage: "The length of website should not exceed 150 characters"
+                options: [{max: 200}],
+                errorMessage: "The length of website should not exceed 200 characters"
+            }
+        },
+        "avatar": {
+            optional: true,
+            isURL: {
+                errorMessage: "Please enter a URL."
+            },
+            isLength: {
+                options: [{max: 200}],
+                errorMessage: "The length of website should not exceed 200 characters"
             }
         }
     };
@@ -281,26 +359,27 @@ exports.postUpdateProfile = (req, res) => {
             return res.json(apiOutputTemplate("error", errors));
         }
 
-        User.findById(req.user.id, (err, user) => {
-            if (err) console.log(err);
+        let user = req.user;
+        let profile = req.user.profile;
+        let body = req.body;
 
-            user.email = req.body.email || user.email;
-            user.profile.name = req.body.name || user.profile.name;
-            user.profile.gender = req.body.gender || user.profile.gender;
-            user.profile.location = req.body.location || user.profile.location;
-            user.profile.phone = req.body.phone || user.profile.phone;
-            user.profile.website = req.body.website || user.profile.website;
+        user.email = body.email || user.email;
+        profile.name = body.name || profile.name;
+        profile.gender = body.gender || profile.gender;
+        profile.location = body.location || profile.location;
+        profile.phone = body.phone || profile.phone;
+        profile.website = body.website || profile.website;
+        profile.avatar = body.avatar || profile.avatar;
 
-            user.save((err) => {
-                if (err) {
-                    if (err.code === 11000) {
-                        return res.json(apiOutputTemplate("error", 'The email address you have entered is already associated with an account.'));
-                    }
-                    console.log(err);
+        user.save((err) => {
+            if (err) {
+                if (err.code === 11000) {
+                    return res.json(apiOutputTemplate("error", 'The email address you have entered is already associated with an account.'));
                 }
+                console.log(err);
+            }
 
-                return res.json(apiOutputTemplate("success", 'Profile information has been updated.'));
-            });
+            return res.json(apiOutputTemplate("success", "Profile information has been updated.", {profile: profile}));
         });
     });
 };

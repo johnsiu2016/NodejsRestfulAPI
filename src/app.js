@@ -17,7 +17,7 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
-
+const myUtil = require('./myUtil');
 
 /**
  * Controllers (route handlers).
@@ -62,7 +62,18 @@ app.use(sass({
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(expressValidator());
+app.use(expressValidator({
+        customValidators: {
+            arrayIsIn: function (providedArray, checkingArray) {
+                if (checkingArray.length === 0) return false;
+                const filtedArray = providedArray.filter((providedValue) => {
+                    return checkingArray.indexOf(providedValue) < 0
+                });
+                return filtedArray.length === 0
+            }
+        }
+    }
+));
 app.use(session({
     resave: true,
     saveUninitialized: true,
@@ -129,16 +140,22 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  */
 
 const api = express.Router();
+// api key gateway
+api.use((req, res, next) => {
+    const apikey = req.query.apikey || req.body.apikey || req.headers.apikey;
+    if (apikey === process.env.APIKEY) next();
+    else res.json(myUtil.apiOutputTemplate("error", "Unauthorized: API key is not correct"));
+});
 // route = api/signup, ..., etc
-api.post('/signup' ,apiController.postSignup);
+api.post('/signup', apiController.postSignup);
 api.post('/login', apiController.postLogin);
-api.get('/account', passport.authenticate('jwt', { failWithError: true }), apiController.getAccount);
-api.post('/account/profile', passport.authenticate('jwt', { failWithError: true }), apiController.postUpdateProfile);
-api.post('/upload', passport.authenticate('jwt', { failWithError: true }), apiController.postFileUpload);
-app.use('/api', api);
+api.get('/account', passport.authenticate('jwt', {failWithError: true}), apiController.getAccount);
+api.post('/account/profile', passport.authenticate('jwt', {failWithError: true}), apiController.postUpdateProfile);
+api.post('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.postFile);
+api.delete('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.deleteFile);
 api.use(handleAPIError);
+app.use('/api', api);
 
-const myUtil = require('./myUtil');
 function handleAPIError(err, req, res, next) {
     let message = "";
     switch (err.status) {
@@ -147,7 +164,7 @@ function handleAPIError(err, req, res, next) {
             break;
         default:
             console.log(err);
-            message = "Unknown error"
+            message = "Unknown error";
             break;
     }
 

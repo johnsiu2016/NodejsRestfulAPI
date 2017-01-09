@@ -19,13 +19,21 @@ const userSchema = new mongoose.Schema({
 
     profile: {
         name: String,
-        gender: { type: String, default: 'male' },
-        location: { type: String, default: 'Hong Kong' },
+        gender: { type: String, default: "male" },
+        location: { type: String, default: "Hong Kong" },
         phone: String,
         website: String,
-        picture: String
+        avatar: String,
+        pictures: {
+            type: [String],
+            validate: [picturesLimit, "{PATH} exceeds the limit of 8"]
+        }
     }
 }, {timestamps: true});
+
+function picturesLimit(pictures) {
+    return pictures.length <= 8;
+}
 
 /**
  * Password hash middleware.
