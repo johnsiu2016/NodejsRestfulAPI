@@ -91,7 +91,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;,&quot;python&quot;,&quot;javascript&quot;]">
+  <body class="index" data-languages="[&quot;shell&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -102,9 +102,6 @@
       <img src="images/logo.png" alt="Logo" />
         <div class="lang-selector">
               <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="ruby">ruby</a>
-              <a href="#" data-language-name="python">python</a>
-              <a href="#" data-language-name="javascript">javascript</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -121,161 +118,377 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
-
-<p>We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
-
-<p>This example API documentation page was created with <a href="https://github.com/tripit/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&rsquo;s documentation.</p>
+<p>Welcome to the MeetUp API!</p>
 
 <h1 id="authentication">Authentication</h1>
 
+<h2 id="api-key">API Key</h2>
+
 <blockquote>
-<p>To authorize, use this code:</p>
+<p>To test the authentication API key, use this code:</p>
 </blockquote>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<pre class="highlight shell"><code><span class="c"># You can provide your key throught header or get param or post body</span>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre><pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
+For header,
+curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx"</span>
+  -H <span class="s2">"apikey: API_KEY"</span>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre><pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+For get param,
+curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx?apikey=API_KEY"</span>
 
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
+For post body,
+curl -d <span class="s2">"apikey=API_KEY"</span> <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx"</span>
 </code></pre>
-<blockquote>
-<p>Make sure to replace <code class="prettyprint">meowmeowmeow</code> with your API key.</p>
-</blockquote>
-
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
-
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code class="prettyprint">Authorization: meowmeowmeow</code></p>
+<p>MeetUp uses API keys to allow access to the API.</p>
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+MeetUp expects for the API key to be included in all API requests to the server through the following three ways:
+(1) Header, or
+(2) GET param, or
+(3) POST body
 </aside>
 
-<h1 id="kittens">Kittens</h1>
+<h2 id="user-authentication">User Authentication</h2>
 
-<h2 id="get-all-kittens">Get All Kittens</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</code></pre><pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre><pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">kittens</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
-</code></pre>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>To test the authentication of user request, use this code:</p>
 </blockquote>
-<pre class="highlight json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves all kittens.</p>
+<pre class="highlight shell"><code>
+curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx?apikey=API_KEY"</span>
+  -H <span class="s2">"authentication: JWT USER_TOKEN"</span>
 
-<h3 id="http-request">HTTP Request</h3>
+</code></pre>
+<p>MeetUp uses JSON Web Token(JWT) to allow access to the user resource.</p>
 
-<p><code class="prettyprint">GET http://example.com/api/kittens</code></p>
-
-<h3 id="query-parameters">Query Parameters</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
-</tr>
-<tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
-</tr>
-</tbody></table>
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+<aside class="notice">
+MeetUp expects for the JWT to be included in all user-specific API requests to the server through 
+the Authentication header
 </aside>
 
-<h2 id="get-a-specific-kitten">Get a Specific Kitten</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<h1 id="account">Account</h1>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<h2 id="signup">SignUp</h2>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/signup?apikey=API_KEY"</span>
+  -d <span class="s2">"email=abctest@abc.com
+  &amp;password=123456
+  &amp;confirmPassword=123456"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Successfully signed up"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4NzM4N2ZlZDg4MjAwMWYzMGY2YTU5YyIsImlhdCI6MTQ4Mzk2NjQ2Mn0.5rp4tBTQrRoAbcBrTTNNtTYNo-QAF0G70wlbmI-30tE"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves a specific kitten.</p>
+<p>This endpoint creates account for user.</p>
 
-<aside class="warning">Inside HTML code blocks like this one, you can&rsquo;t use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+<h3 id="http-post-request">HTTP POST Request</h3>
 
-<h3 id="http-request">HTTP Request</h3>
+<p><code class="prettyprint">POST https://young-cove-95141.herokuapp.com/api/signup</code></p>
 
-<p><code class="prettyprint">GET http://example.com/kittens/&lt;ID&gt;</code></p>
-
-<h3 id="url-parameters">URL Parameters</h3>
+<h3 id="post-parameters">POST Parameters</h3>
 
 <table><thead>
 <tr>
 <th>Parameter</th>
+<th>Optional</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
+<td>email</td>
+<td>No</td>
+<td>User account</td>
+</tr>
+<tr>
+<td>password</td>
+<td>No</td>
+<td>User password</td>
+</tr>
+<tr>
+<td>confirmPassword</td>
+<td>No</td>
+<td>Confirmed user password, which should match with the password parameter</td>
 </tr>
 </tbody></table>
+
+<aside class="success">
+Remember — Put your API Key in all request, including this.
+</aside>
+
+<h2 id="login">Login</h2>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/login?apikey=API_KEY"</span>
+  -d <span class="s2">"email=abctest@abc.com
+  &amp;password=123456"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Successfully logged in."</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4NzM4N2ZlZDg4MjAwMWYzMGY2YTU5YyIsImlhdCI6MTQ4Mzk2NjYxMn0.QnHYRjYtTux8ctvwZZhTjQ2Zc7XAsq_u4CMJMEhuc9I"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint logins the user.</p>
+
+<h3 id="http-post-request">HTTP POST Request</h3>
+
+<p><code class="prettyprint">POST https://young-cove-95141.herokuapp.com/api/login</code></p>
+
+<h3 id="post-parameters">POST Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Optional</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>email</td>
+<td>No</td>
+<td>User account</td>
+</tr>
+<tr>
+<td>password</td>
+<td>No</td>
+<td>User password</td>
+</tr>
+</tbody></table>
+
+<h1 id="user-information">User Information</h1>
+
+<h2 id="account">Account</h2>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/account?apikey=API_KEY"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aad34dwqe56456qe@asds.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"userProfile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"male"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hong Kong"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"pictures"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint gets user account information.</p>
+
+<h3 id="http-get-request">HTTP GET Request</h3>
+
+<p><code class="prettyprint">GET https://young-cove-95141.herokuapp.com/api/account</code></p>
+
+<h3 id="get-parameters">GET Parameters</h3>
+
+<p>No parameters require.</p>
+
+<aside class="success">
+Remember — Put the user token in all user-specific request through the Authentication, including this. E.G: Authentication: JWT USER_TOKEN
+</aside>
+
+<h2 id="account-profile">Account Profile</h2>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/account/profile?apikey=API_KEY"</span>
+  -d <span class="s2">"email=abctest@abc.com
+  &amp;name=johnsiu
+  &amp;gender=male
+  &amp;location=HK
+  &amp;phone=12345678
+  &amp;website=www.abc.com
+  &amp;avatar=www.abc.com/image.jpeg"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profile information has been updated."</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"屎劣, 屎昨 4123 @@! &amp;lt;script&amp;gt;alert(&amp;#x27;asdas&amp;#x27;)&amp;lt;&amp;#x2F;script&amp;gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"pictures"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"http://localhost:3000/uploads/d677290d6feee3c1c0bceb6d6872e3dd_1000_800_1483962657837.jpg"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"http://localhost:3000/uploads/de4675181c2c1ab4f6e9020415070446_1000_800_1483963014833.jpg"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"http://localhost:3000/uploads/63657465d2b4fa4fdffbb42e856e3f5a_1000_800_1483963015226.jpg"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"http://localhost:3000/uploads/591c58c43ba626967db22eada2a75523_1000_800_1483963015496.jpg"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.johnssadasdsadsaaaaaaaassssssssssssssssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaadadadadadadadadadadadadiu.comasd"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567811"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/591c58c43ba626967db22eada2a75523_1000_800_1483963015496.jpg"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint updates user account information.</p>
+
+<h3 id="http-post-request">HTTP POST Request</h3>
+
+<p><code class="prettyprint">POST https://young-cove-95141.herokuapp.com/api/account/profile</code></p>
+
+<h3 id="post-parameters">POST Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Optional</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>email</td>
+<td>Yes</td>
+<td>Valid email</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Yes</td>
+<td>Any characters, and cannot exceed 15 characters</td>
+</tr>
+<tr>
+<td>gender</td>
+<td>Yes</td>
+<td>Can only be one of the following value [&lsquo;male&rsquo;, &#39;female&rsquo;, &#39;other&rsquo;]</td>
+</tr>
+<tr>
+<td>location</td>
+<td>Yes</td>
+<td>Any characters, and cannot exceed 150 characters</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>Yes</td>
+<td>Numeric number, and is in the range of 8 to 11 characters.</td>
+</tr>
+<tr>
+<td>website</td>
+<td>Yes</td>
+<td>Valid URL, and cannot exceed 200 characters.</td>
+</tr>
+<tr>
+<td>avatar</td>
+<td>Yes</td>
+<td>Valid URL, and cannot exceed 200 characters.</td>
+</tr>
+</tbody></table>
+
+<h2 id="user-avatars-upload">User avatars upload</h2>
+<pre class="highlight shell"><code>curl
+  -F <span class="s2">"width=1000"</span>
+  -F <span class="s2">"height=/800"</span>
+  -F <span class="s2">"picture=@/home/user1/Desktop/test.jpg"</span>
+  <span class="s2">"https://young-cove-95141.herokuapp.com/api/upload?apikey=API_KEY"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"imageURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/ab0c2ed7bbde50b04461c355beb30dfa_1000_800_1483968993297.jpg"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint uploads an image to the server</p>
+
+<h3 id="http-post-request">HTTP POST Request</h3>
+
+<p><code class="prettyprint">POST https://young-cove-95141.herokuapp.com/api/upload</code></p>
+
+<h3 id="post-parameters">POST Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Optional</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>picture</td>
+<td>No</td>
+<td>image data</td>
+</tr>
+<tr>
+<td>width</td>
+<td>Yes</td>
+<td>image width</td>
+</tr>
+<tr>
+<td>height</td>
+<td>Yes</td>
+<td>image height</td>
+</tr>
+</tbody></table>
+
+<h2 id="user-avatars-delete">User avatars delete</h2>
+<pre class="highlight shell"><code>curl -X <span class="s2">"DELETE"</span> https://young-cove-95141.herokuapp.com/api/upload?apikey<span class="o">=</span>API_KEY
+  -d <span class="s2">"pictures=http://localhost:3000/uploads/ab0c2ed7bbde50b04461c355beb30dfa_1000_800_1483968993297.jpg
+    &amp;pictureshttp://localhost:3000/uploads/61585c49827c44c9e58714dd414feafa_1000_800_1483969209755.jpg"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Pictures has been deleted from user."</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"pictures"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"http://localhost:3000/uploads/9e0a2d9148bb019a6764e462a21c3355_1000_800_1483969209063.jpg"</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint deletes images of user already uploaded images to the server</p>
+
+<h3 id="http-delete-request">HTTP DELETE Request</h3>
+
+<p><code class="prettyprint">DELETE https://young-cove-95141.herokuapp.com/api/upload</code></p>
+
+<h3 id="delete-parameters">DELETE Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Optional</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pictures</td>
+<td>No</td>
+<td>image url</td>
+</tr>
+<tr>
+<td>pictures</td>
+<td>No</td>
+<td>image url</td>
+</tr>
+<tr>
+<td>pictures</td>
+<td>No</td>
+<td>image url</td>
+</tr>
+</tbody></table>
+
+<aside class="success">
+You can provide multiple parameters of the same name
+</aside>
 
           <h1 id="errors">Errors</h1>
 
@@ -339,9 +552,6 @@ Remember — a happy kitten is an authenticated kitten!
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="ruby">ruby</a>
-                <a href="#" data-language-name="python">python</a>
-                <a href="#" data-language-name="javascript">javascript</a>
           </div>
       </div>
     </div>

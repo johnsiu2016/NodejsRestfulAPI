@@ -173,7 +173,7 @@ exports.postFile = (req, res) => {
         return res.json(apiOutputTemplate("error", "profile.picture exceeds the limit of 8"));
     }
 
-    upload.single('myFile')(req, res, (err) => {
+    upload.single('picture')(req, res, (err) => {
         // This err is multer specific one, which sucks.
         if (err) {
             let message = "";
@@ -186,6 +186,10 @@ exports.postFile = (req, res) => {
             }
 
             return res.json(apiOutputTemplate("error", message));
+        }
+
+        if (!req.file) {
+            return res.json(apiOutputTemplate("error", "picture field is required."));
         }
 
         const width = Number(req.body.width) || 320;
@@ -325,7 +329,7 @@ exports.postUpdateProfile = (req, res) => {
                 errorMessage: "Phone should only contains number"
             },
             isLength: {
-                options: [{max: 11}],
+                options: [{max: 11, min: 8}],
                 errorMessage: "The length of phone should not exceed 11 characters"
             }
         },
