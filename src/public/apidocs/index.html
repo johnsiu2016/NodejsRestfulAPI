@@ -118,7 +118,7 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the MeetUp API!</p>
+<p>Welcome to the MeetUp API! This is the API docs for meetUp project, written by John Siu. </p>
 
 <h1 id="authentication">Authentication</h1>
 
@@ -127,17 +127,16 @@
 <blockquote>
 <p>To test the authentication API key, use this code:</p>
 </blockquote>
-<pre class="highlight shell"><code><span class="c"># You can provide your key throught header or get param or post body</span>
+<pre class="highlight shell"><code><span class="c"># You can provide your key through header or get param or post body</span>
 
 For header,
-curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx"</span>
-  -H <span class="s2">"apikey: API_KEY"</span>
+curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx"</span> -H <span class="s2">"apikey: API_KEY"</span>
 
 For get param,
 curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx?apikey=API_KEY"</span>
 
 For post body,
-curl -d <span class="s2">"apikey=API_KEY"</span> <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx"</span>
+curl<span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx"</span> -d <span class="s2">"apikey=API_KEY"</span>
 </code></pre>
 <p>MeetUp uses API keys to allow access to the API.</p>
 
@@ -148,14 +147,13 @@ MeetUp expects for the API key to be included in all API requests to the server 
 (3) POST body
 </aside>
 
-<h2 id="user-authentication">User Authentication</h2>
+<h2 id="user-authorization">User Authorization</h2>
 
 <blockquote>
-<p>To test the authentication of user request, use this code:</p>
+<p>To test the Authorization of user request, use this code:</p>
 </blockquote>
 <pre class="highlight shell"><code>
-curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx?apikey=API_KEY"</span>
-  -H <span class="s2">"authentication: JWT USER_TOKEN"</span>
+curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/xxxxx?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span>
 
 </code></pre>
 <p>MeetUp uses JSON Web Token(JWT) to allow access to the user resource.</p>
@@ -168,10 +166,7 @@ the Authentication header
 <h1 id="account">Account</h1>
 
 <h2 id="signup">SignUp</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/signup?apikey=API_KEY"</span>
-  -d <span class="s2">"email=abctest@abc.com
-  &amp;password=123456
-  &amp;confirmPassword=123456"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/signup?apikey=API_KEY"</span> -d <span class="s2">"email=abctest@abc.com&amp;password=123456&amp;confirmPassword=123456"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -221,9 +216,7 @@ Remember — Put your API Key in all request, including this.
 </aside>
 
 <h2 id="login">Login</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/login?apikey=API_KEY"</span>
-  -d <span class="s2">"email=abctest@abc.com
-  &amp;password=123456"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/login?apikey=5c4c4f59be455ef34c1d98007a374be5"</span> -d <span class="s2">"email=abctest@abc.com&amp;password=123456"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -266,7 +259,7 @@ Remember — Put your API Key in all request, including this.
 <h1 id="user-information">User Information</h1>
 
 <h2 id="account">Account</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/account?apikey=API_KEY"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/account?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -299,14 +292,7 @@ Remember — Put the user token in all user-specific request through the Authent
 </aside>
 
 <h2 id="account-profile">Account Profile</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/account/profile?apikey=API_KEY"</span>
-  -d <span class="s2">"email=abctest@abc.com
-  &amp;name=johnsiu
-  &amp;gender=male
-  &amp;location=HK
-  &amp;phone=12345678
-  &amp;website=www.abc.com
-  &amp;avatar=www.abc.com/image.jpeg"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/account/profile?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span> -d <span class="s2">"email=abctest@abc.com&amp;name=johnsiu&amp;gender=male&amp;location=HK&amp;phone=12345678&amp;website=www.abc.com&amp;avatar=www.abc.com/image.jpeg"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -385,11 +371,7 @@ Remember — Put the user token in all user-specific request through the Authent
 </tbody></table>
 
 <h2 id="user-avatars-upload">User avatars upload</h2>
-<pre class="highlight shell"><code>curl
-  -F <span class="s2">"width=1000"</span>
-  -F <span class="s2">"height=/800"</span>
-  -F <span class="s2">"picture=@/home/user1/Desktop/test.jpg"</span>
-  <span class="s2">"https://young-cove-95141.herokuapp.com/api/upload?apikey=API_KEY"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/upload?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span> -F <span class="s2">"width=1000"</span> -F <span class="s2">"height=800"</span> -F <span class="s2">"picture=@/c/Users/John Siu/Desktop/1418878_1e92283336.jpg"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -435,9 +417,7 @@ Remember — Put the user token in all user-specific request through the Authent
 </tbody></table>
 
 <h2 id="user-avatars-delete">User avatars delete</h2>
-<pre class="highlight shell"><code>curl -X <span class="s2">"DELETE"</span> https://young-cove-95141.herokuapp.com/api/upload?apikey<span class="o">=</span>API_KEY
-  -d <span class="s2">"pictures=http://localhost:3000/uploads/ab0c2ed7bbde50b04461c355beb30dfa_1000_800_1483968993297.jpg
-    &amp;pictureshttp://localhost:3000/uploads/61585c49827c44c9e58714dd414feafa_1000_800_1483969209755.jpg"</span>
+<pre class="highlight shell"><code>curl -X <span class="s2">"DELETE"</span> <span class="s2">"https://young-cove-95141.herokuapp.com/api/upload?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span> -d <span class="s2">"pictures=http://young-cove-95141.herokuapp.com/uploads/b4914a227e016711cb82214ec4a72010_1000_800_1484018175917.jpg&amp;pictures=http://young-cove-95141.herokuapp.com/uploads/c8685c7e15cdbb0f16587610653d40bf_1000_800_1484018050414.jpg"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
