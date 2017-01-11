@@ -153,6 +153,10 @@ api.get('/account', passport.authenticate('jwt', {failWithError: true}), apiCont
 api.post('/account/profile', passport.authenticate('jwt', {failWithError: true}), apiController.postUpdateProfile);
 api.post('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.postFile);
 api.delete('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.deleteFile);
+
+api.api('/events', passport.authenticate('jwt', {failWithError: true}), apiController.postFile);
+api.post('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.postFile);
+api.delete('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.deleteFile);
 api.use(handleAPIError);
 app.use('/api', api);
 

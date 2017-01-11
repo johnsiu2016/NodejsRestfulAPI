@@ -164,22 +164,22 @@ const upload = multer({
         cb(`File upload only supports the following file types - ${allowFiletypes}`);
     },
     limits: {
-        fileSize: 5 * 100000
+        fileSize: 2 * 1000000
     }
 });
 
 exports.postFile = (req, res) => {
-    if (req.user.profile.pictures.length >= 8) {
-        return res.json(apiOutputTemplate("error", "profile.picture exceeds the limit of 8"));
+    if (req.user.profile.photos.length >= 8) {
+        return res.json(apiOutputTemplate("error", "profile.photos exceeds the limit of 8"));
     }
 
-    upload.single('picture')(req, res, (err) => {
+    upload.single('photo')(req, res, (err) => {
         // This err is multer specific one, which sucks.
         if (err) {
             let message = "";
             // This err code is multer itself implementation, which is funny
             if (err.code === "LIMIT_FILE_SIZE") {
-                message = "File size > 5MB"
+                message = "File size > 2MB"
             } else {
                 // This is the message I passed from the above cb
                 message = err;
@@ -189,7 +189,7 @@ exports.postFile = (req, res) => {
         }
 
         if (!req.file) {
-            return res.json(apiOutputTemplate("error", "picture field is required."));
+            return res.json(apiOutputTemplate("error", "Photo field is required."));
         }
 
         const width = Number(req.body.width) || 320;
@@ -206,7 +206,7 @@ exports.postFile = (req, res) => {
 
             fs.unlink(req.file.path, (err) => {
                 if (err) console.log(err);
-                const imageURL = `${req.protocol}://${req.get('host')}/uploads/${path.parse(outputPath).base}`;
+                const photoURL = `${req.protocol}://${req.get('host')}/uploads/${path.parse(outputPath).base}`;
 
                 const user = req.user;
                 const profile = req.user.profile;
@@ -214,12 +214,12 @@ exports.postFile = (req, res) => {
                 if (!profile.avatar) {
                     profile.avatar = imageURL;
                 }
-                user.profile.pictures.push(imageURL);
+                user.profile.photos.push(photoURL);
 
                 user.save((err) => {
-                    if (err) return res.json(apiOutputTemplate("error", err.errors['profile.pictures'].message));
+                    if (err) return res.json(apiOutputTemplate("error", err.errors['profile.photo'].message));
 
-                    return res.json(apiOutputTemplate("success", 'success', {imageURL: imageURL}));
+                    return res.json(apiOutputTemplate("success", 'success', {photoURL: photoURL}));
                 });
             });
         });
@@ -227,16 +227,16 @@ exports.postFile = (req, res) => {
 };
 
 exports.deleteFile = (req, res) => {
-    if (!Array.isArray(req.body.pictures)) {
-        req.body.pictures = [req.body.pictures];
+    if (!Array.isArray(req.body.photos)) {
+        req.body.photos = [req.body.photos];
     }
 
     const validationSchema = {
-        "pictures": {
+        "photos": {
             optional: true,
             arrayIsIn: {
-                options: [req.user.profile.pictures],
-                errorMessage: `The deleting pictures should only be one of the URL of its profile pictures list [${req.user.profile.pictures.toString()}]`
+                options: [req.user.profile.photos],
+                errorMessage: `The deleting photos should only be one of the URL of its profile photos list [${req.user.profile.photos.toString()}]`
             }
         }
     };
@@ -253,9 +253,9 @@ exports.deleteFile = (req, res) => {
         let profile = req.user.profile;
         let body = req.body;
 
-        body.pictures.forEach((picture) => {
+        body.photos.forEach((photo) => {
             const dirName = path.join(process.cwd(), 'uploads');
-            const fileName = path.parse(picture).base;
+            const fileName = path.parse(photo).base;
             const filePath = path.join(dirName, fileName);
 
             fs.unlink(filePath, (err) => {
@@ -263,17 +263,17 @@ exports.deleteFile = (req, res) => {
             });
         });
 
-        profile.pictures = profile.pictures.filter((picture) => body.pictures.indexOf(picture) < 0);
+        profile.photos = profile.photos.filter((photo) => body.photos.indexOf(photo) < 0);
 
-        const avatarIndex = body.pictures.indexOf(profile.avatar);
+        const avatarIndex = body.photos.indexOf(profile.avatar);
         if (avatarIndex >= 0) {
-            profile.avatar = profile.pictures[0];
+            profile.avatar = profile.photos[0];
         }
 
         user.save((err) => {
             if (err) console.log(err);
 
-            return res.json(apiOutputTemplate("success", "Pictures has been deleted from user.", {profile: {pictures: profile.pictures}}));
+            return res.json(apiOutputTemplate("success", "Photos has been deleted from user.", {profile: {photos: profile.photos}}));
         });
     });
 };

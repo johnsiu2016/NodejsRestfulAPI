@@ -24,15 +24,17 @@ const userSchema = new mongoose.Schema({
         phone: String,
         website: String,
         avatar: String,
-        pictures: {
-            type: [String],
-            validate: [picturesLimit, "{PATH} exceeds the limit of 8"]
+        photos: {
+            type:{ // The event venue, present only if selected and not hidden by an organizer
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "PhotoAlbum"
+            }
         }
     }
 }, {timestamps: true});
 
-function picturesLimit(pictures) {
-    return pictures.length <= 8;
+function photosLimit(photos) {
+    return photos.length <= 8;
 }
 
 /**
