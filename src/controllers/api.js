@@ -1,12 +1,14 @@
 'use strict';
 
 const User = require('../models/User');
+const Photo = require('../models/Photo');
+const Event = require('../models/Event');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const sharp = require('sharp');
 const myUtil = require('../myUtil');
 const apiOutputTemplate = myUtil.apiOutputTemplate;
-const createDirIfNotExists = myUtil.createDirIfNotExists;
+const moment = require('moment');
 
 const async = require('async');
 const graph = require('fbgraph');
@@ -78,7 +80,7 @@ exports.postSignup = (req, res) => {
                     id: user.id
                 }, process.env.JWTSECRET);
 
-                return res.json(apiOutputTemplate("success", 'Successfully signed up', {token: jwtToken}));
+                return res.json(apiOutputTemplate("success", 'Successfully signed up', {token: jwtToken, id: user.id}));
             });
         });
     });
@@ -125,175 +127,40 @@ exports.postLogin = (req, res) => {
                 id: user.id
             }, process.env.JWTSECRET);
 
-            return res.json(apiOutputTemplate("success", "Successfully logged in.", {token: jwtToken}));
+            return res.json(apiOutputTemplate("success", "Successfully logged in.", {token: jwtToken, id: user.id}));
 
         })(req, res);
     });
 };
 
-// File upload
-const multer = require('multer');
-const crypto = require('crypto');
-const path = require('path');
-const fs = require('fs');
-
-createDirIfNotExists(process.cwd() + '/uploads', (err) => {
-    if (err) console.log(err);
-});
-
-const upload = multer({
-    storage: multer.diskStorage({
-        destination: function (req, file, cb) {
-            cb(null, path.join(process.cwd(), 'uploads'));
-        },
-        filename: function (req, file, cb) {
-            const extension = path.extname(file.originalname).toLowerCase();
-            const name = crypto.createHash('md5').update(`${file.originalname}${Date.now()}`).digest('hex').toLowerCase();
-            cb(null, `${name}${extension}`);
-        }
-    }),
-    fileFilter: function (req, file, cb) {
-        const allowFiletypes = /jpeg|jpg|png/;
-        const isAllowMimetype = allowFiletypes.test(file.mimetype);
-        const isAllowExtension = allowFiletypes.test(path.extname(file.originalname).toLowerCase());
-
-        if (isAllowMimetype && isAllowExtension) {
-            return cb(null, true);
-        }
-
-        cb(`File upload only supports the following file types - ${allowFiletypes}`);
-    },
-    limits: {
-        fileSize: 2 * 1000000
-    }
-});
-
-exports.postFile = (req, res) => {
-    if (req.user.profile.photos.length >= 8) {
-        return res.json(apiOutputTemplate("error", "profile.photos exceeds the limit of 8"));
-    }
-
-    upload.single('photo')(req, res, (err) => {
-        // This err is multer specific one, which sucks.
-        if (err) {
-            let message = "";
-            // This err code is multer itself implementation, which is funny
-            if (err.code === "LIMIT_FILE_SIZE") {
-                message = "File size > 2MB"
-            } else {
-                // This is the message I passed from the above cb
-                message = err;
-            }
-
-            return res.json(apiOutputTemplate("error", message));
-        }
-
-        if (!req.file) {
-            return res.json(apiOutputTemplate("error", "Photo field is required."));
-        }
-
-        const width = Number(req.body.width) || 320;
-        const height = Number(req.body.height) || 240;
-
-        const tmp = req.file.path.split(".");
-        const outputPath = `${tmp[0]}_${width}_${height}_${Date.now()}.${tmp[1]}`;
-
-        sharp.cache(false);
-        sharp(req.file.path).resize(width, height).toFile(outputPath, (err, info) => {
-            if (err) {
-                return res.json(apiOutputTemplate("error", err, {info: info}));
-            }
-
-            fs.unlink(req.file.path, (err) => {
-                if (err) console.log(err);
-                const photoURL = `${req.protocol}://${req.get('host')}/uploads/${path.parse(outputPath).base}`;
-
-                const user = req.user;
-                const profile = req.user.profile;
-
-                if (!profile.avatar) {
-                    profile.avatar = imageURL;
-                }
-                user.profile.photos.push(photoURL);
-
-                user.save((err) => {
-                    if (err) return res.json(apiOutputTemplate("error", err.errors['profile.photo'].message));
-
-                    return res.json(apiOutputTemplate("success", 'success', {photoURL: photoURL}));
-                });
-            });
-        });
-    });
-};
-
-exports.deleteFile = (req, res) => {
-    if (!Array.isArray(req.body.photos)) {
-        req.body.photos = [req.body.photos];
-    }
-
-    const validationSchema = {
-        "photos": {
-            optional: true,
-            arrayIsIn: {
-                options: [req.user.profile.photos],
-                errorMessage: `The deleting photos should only be one of the URL of its profile photos list [${req.user.profile.photos.toString()}]`
-            }
-        }
-    };
-
-    req.checkBody(validationSchema);
-    req.getValidationResult().then(function (result) {
-        const errors = result.array();
-
-        if (!result.isEmpty()) {
-            return res.json(apiOutputTemplate("error", errors));
-        }
-
-        let user = req.user;
-        let profile = req.user.profile;
-        let body = req.body;
-
-        body.photos.forEach((photo) => {
-            const dirName = path.join(process.cwd(), 'uploads');
-            const fileName = path.parse(photo).base;
-            const filePath = path.join(dirName, fileName);
-
-            fs.unlink(filePath, (err) => {
-                if (err) console.log(err);
-            });
-        });
-
-        profile.photos = profile.photos.filter((photo) => body.photos.indexOf(photo) < 0);
-
-        const avatarIndex = body.photos.indexOf(profile.avatar);
-        if (avatarIndex >= 0) {
-            profile.avatar = profile.photos[0];
-        }
-
-        user.save((err) => {
-            if (err) console.log(err);
-
-            return res.json(apiOutputTemplate("success", "Photos has been deleted from user.", {profile: {photos: profile.photos}}));
-        });
-    });
-};
-
 // Get Account Profile
-exports.getAccount = (req, res) => {
-    const data = {
-        email: req.user.email,
-        userProfile: req.user.profile
-    };
-    return res.json(apiOutputTemplate("success", "success", data));
+exports.getMemberProfile = (req, res) => {
+    Photo.populate(req.user, {
+        path: "profile.photos profile.avatar",
+        select: "photoURL highresURL"
+    }, (err, populatedUser) => {
+        if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+        return res.json(apiOutputTemplate("success", 'success', {
+            email: req.user.email,
+            profile: populatedUser.profile
+        }));
+    });
 };
 
 // Update Account Profile
-exports.postUpdateProfile = (req, res) => {
+exports.patchMemberProfile = (req, res) => {
 
     req.sanitize('name').escape();
     req.sanitize('name').trim();
     req.sanitize('location').escape();
     req.sanitize('location').trim();
+
+    // mongoose array no indexof method.
+    const tmpPhotos = [];
+    req.user.profile.photos.forEach((photo) => {
+        tmpPhotos.push(photo);
+    });
 
     const validationSchema = {
         "email": {
@@ -345,8 +212,9 @@ exports.postUpdateProfile = (req, res) => {
         },
         "avatar": {
             optional: true,
-            isURL: {
-                errorMessage: "Please enter a URL."
+            isIn: {
+                options: [tmpPhotos],
+                errorMessage: `Avatar should only be one of the [${tmpPhotos.toString()}]`
             },
             isLength: {
                 options: [{max: 200}],
@@ -375,7 +243,7 @@ exports.postUpdateProfile = (req, res) => {
         profile.website = body.website || profile.website;
         profile.avatar = body.avatar || profile.avatar;
 
-        user.save((err) => {
+        user.save((err, savedUser) => {
             if (err) {
                 if (err.code === 11000) {
                     return res.json(apiOutputTemplate("error", 'The email address you have entered is already associated with an account.'));
@@ -383,7 +251,187 @@ exports.postUpdateProfile = (req, res) => {
                 console.log(err);
             }
 
-            return res.json(apiOutputTemplate("success", "Profile information has been updated.", {profile: profile}));
+            Photo.populate(savedUser, {
+                path: "profile.photos profile.avatar",
+                select: "photoURL highresURL"
+            }, (err, populatedSavedUser) => {
+                if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+                return res.json(apiOutputTemplate("success", 'success', {profile: populatedSavedUser.profile}));
+            });
+        });
+    });
+};
+
+exports.postMemberProfilePhoto = (req, res) => {
+    let savedPhoto = myUtil.photoUpload(req, res);
+
+    const user = req.user;
+    const profile = req.user.profile;
+
+    if (!profile.avatar) {
+        profile.avatar = savedPhoto.id;
+    }
+    user.profile.photos.push(savedPhoto.id);
+
+    user.save((err, savedUser) => {
+        if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+        Photo.populate(savedUser, {
+            path: "profile.photos profile.avatar",
+            select: "photoURL highresURL"
+        }, (err, populatedSavedUser) => {
+            if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+            return res.json(apiOutputTemplate("success", 'success', {profile: populatedSavedUser.profile}));
+        });
+    });
+};
+
+// delete method do not have user found in passport now
+exports.deleteMemberProfilePhoto = (req, res) => {
+    const dirName = path.join(process.cwd(), 'uploads');
+
+    Photo.findById(req.params.photo_id, (err, foundPhoto) => {
+        if (!foundPhoto) return res.json(apiOutputTemplate("error", `${req.params.photo_id} is not found`));
+
+        const photoURL = foundPhoto.photoURL;
+        const highresURL = foundPhoto.highresURL;
+
+        [photoURL, highresURL].forEach((URL) => {
+            const fileName = path.parse(URL).base;
+            const filePath = path.join(dirName, fileName);
+
+            fs.unlink(filePath, (err) => {
+                if (err) console.log(err);
+            });
+        });
+
+        // delete method do not have user found in passport now
+        foundPhoto.remove((err) => {
+            if (err) console.log(err);
+
+            // use findById, because I need to update avatar using current value but single update operation does not provide current field value
+            User.findById(req.params.member_id, (err, foundUser) => {
+                let profile = foundUser.profile;
+
+                profile.photos = profile.photos.filter((photo) => photo != req.params.photo_id);
+                // use double equal, because javascript string type != mongoose string type
+                if (req.params.photo_id == profile.avatar) {
+                    profile.avatar = profile.photos[0];
+                }
+
+                foundUser.save((err, savedUser) => {
+                    if (err) console.log(err);
+
+                    Photo.populate(savedUser, {
+                        path: "profile.photos profile.avatar",
+                        select: "photoURL highresURL"
+                    }, (err, populatedSavedUser) => {
+                        if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+                        return res.json(apiOutputTemplate("success", 'success', {profile: populatedSavedUser.profile}));
+                    });
+                });
+            });
+
+            // User.update({_id: req.user.id}, {$pull: {"profile.photos": req.params.photo_id}}, (err, numberAffected) => {
+            //     if (err) console.log(err);
+            //
+            //     return res.json(apiOutputTemplate("success", "Photos has been deleted from user.", {numberAffected: numberAffected}));
+            // });
+        })
+    });
+};
+
+exports.getMemberEvents = (req, res) => {
+    Event.populate(req.user, {
+        path: "events"
+    }, (err, populatedUser) => {
+        if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+        return res.json(apiOutputTemplate("success", 'success', {events: populatedUser.events}));
+    });
+};
+
+myUtil.configNumeral();
+const numeral = require('numeral');
+
+exports.postMemberEvents = (req, res) => {
+    const validationSchema = {
+        "name": {
+            notEmpty: true,
+            isLength: {
+                options: [{max: 25}],
+                errorMessage: "The length of name should not exceed 25 characters."
+            },
+            errorMessage: "Name is required."
+        },
+        "description": {
+            notEmpty: true,
+            isLength: {
+                options: [{max: 200}],
+                errorMessage: "The length of name should not exceed 200 characters."
+            },
+            errorMessage: "Description is required."
+        },
+        "time": {
+            isDate: {
+                errorMessage: "Date is not valid. Example of valid date: 2017-01-18 15:00:00"
+            }
+        },
+        "duration": {
+            isNumeric: {
+                errorMessage: "Duration is not valid."
+            },
+            errorMessage: "Duration is required."
+        },
+        "fee": {
+            isNumeric: {
+                errorMessage: "Fee is not valid."
+            }
+        },
+        "status": {
+            isIn: {
+                options: [["cancelled", "upcoming", "past", "proposed", "suggested", "draft"]],
+                errorMessage: `status should be one of the value of the list ${["cancelled", "upcoming", "past", "proposed", "suggested", "draft"]}.`
+            }
+        }
+    };
+
+    req.checkBody(validationSchema);
+    req.getValidationResult().then(function (result) {
+        const errors = result.array();
+
+        if (!result.isEmpty()) {
+            return res.json(apiOutputTemplate("error", errors));
+        }
+
+        req.sanitize('name').escape();
+        req.sanitize('name').trim();
+        req.sanitize('description').escape();
+        req.sanitize('description').trim();
+
+        let user = req.user;
+        let body = req.body;
+
+        let event = new Event({
+            name: body.name,
+            description: body.description,
+            time: moment(req.body.time).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+            duration: myUtil.processTimeDuration(body.duration),
+            eventHosts: [user._id],
+            fee: numeral(body.fee).format('$0,0'),
+            status: body.status
+        });
+
+        event.save((err, savedEvent) => {
+            if (err) return console.log(err);
+            user.events.push(savedEvent._id);
+            user.save((err, savedUser) => {
+                if (err) return console.log(err);
+                return res.json(apiOutputTemplate("success", 'success', {events: savedUser.events}));
+            });
         });
     });
 };

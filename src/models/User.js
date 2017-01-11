@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
+const mongoFieldUpperLimitValidation = require("../myUtil").mongoFieldUpperLimitValidation;
 
 const userSchema = new mongoose.Schema({
     email: {type: String, unique: true},
@@ -19,23 +20,28 @@ const userSchema = new mongoose.Schema({
 
     profile: {
         name: String,
-        gender: { type: String, default: "male" },
-        location: { type: String, default: "Hong Kong" },
+        gender: {type: String, default: "male"},
+        location: {type: String, default: "Hong Kong"},
         phone: String,
         website: String,
-        avatar: String,
-        photos: {
-            type:{ // The event venue, present only if selected and not hidden by an organizer
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "PhotoAlbum"
-            }
-        }
-    }
+        avatar: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Photo"
+        },
+        photos: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Photo"
+        }]
+    },
+
+    events: [{ // The event venue, present only if selected and not hidden by an organizer
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Photo"
+    }],
+
 }, {timestamps: true});
 
-function photosLimit(photos) {
-    return photos.length <= 8;
-}
+userSchema.path('profile.photos').validate(mongoFieldUpperLimitValidation(8), "{PATH} exceeds the limit of 8");
 
 /**
  * Password hash middleware.

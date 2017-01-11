@@ -23,20 +23,42 @@ passport.deserializeUser((id, done) => {
 
 passport.use(new JwtStrategy({
     jwtFromRequest: ExtractJwt.fromAuthHeader(),
-    secretOrKey: process.env.JWTSECRET
+    secretOrKey: process.env.JWTSECRET,
+    passReqToCallback: true
+}, function(req, jwt_payload, done) {
+    if (req.params.member_id) {
+        if (req.params.member_id === jwt_payload.id) {
+            if (req.method === "DELETE") {
+                return done(null, true);
+            }
 
-}, function(jwt_payload, done) {
-    User.findOne({_id: jwt_payload.id}, function(err, user) {
-        if (err) {
-            return done(err, false);
-        }
+            User.findOne({_id: jwt_payload.id}, function(err, user) {
+                if (err) {
+                    return done(err, false);
+                }
 
-        if (user) {
-            return done(null, user);
+                if (user) {
+                    return done(null, user);
+                } else {
+                    return done(null, false, {msg: 'User of ID from JWT payload is not found.'});
+                }
+            });
+        } else if (req.method === "GET") {
+            User.findOne({_id: req.params.member_id}, function(err, user) {
+                if (err) {
+                    return done(err, false);
+                }
+
+                if (user) {
+                    return done(null, user);
+                } else {
+                    return done(null, false, {msg: 'User of ID from request params is not found.'});
+                }
+            });
         } else {
-            return done(null, false, {msg: 'ID from JWT payload is not found.'});
+            return done({status: 403}, false);
         }
-    });
+    }
 }));
 
 /**

@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const venueSchema = new mongoose.Schema({
-    create: Date,
-    type: String, // user or event
-    highresLink: String,
-    thumbLink: String
-});
+const photoSchema = new mongoose.Schema({
+    photoURL: String,
+    highresURL: String,
+    type: String, // user or event; for indexing?
+    baseUrl: String // indexing?
+}, {timestamps: true});
 
-const Venue = mongoose.model('Event', venueSchema);
+const Photo = mongoose.model('Photo', photoSchema);
 
-module.exports = Venue;
+module.exports = Photo;

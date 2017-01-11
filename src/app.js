@@ -146,17 +146,31 @@ api.use((req, res, next) => {
     if (apikey === process.env.APIKEY) next();
     else res.json(myUtil.apiOutputTemplate("error", "Unauthorized: API key is not correct"));
 });
-// route = api/signup, ..., etc
+// account, User Model
 api.post('/signup', apiController.postSignup);
 api.post('/login', apiController.postLogin);
-api.get('/account', passport.authenticate('jwt', {failWithError: true}), apiController.getAccount);
-api.post('/account/profile', passport.authenticate('jwt', {failWithError: true}), apiController.postUpdateProfile);
-api.post('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.postFile);
-api.delete('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.deleteFile);
 
-api.api('/events', passport.authenticate('jwt', {failWithError: true}), apiController.postFile);
-api.post('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.postFile);
-api.delete('/upload', passport.authenticate('jwt', {failWithError: true}), apiController.deleteFile);
+// profiles, User Model
+api.get('/members/:member_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.getMemberProfile);
+api.patch('/members/:member_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.patchMemberProfile);
+
+// photos, Photo Model
+api.post('/members/:member_id/photos', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postMemberProfilePhoto);
+api.delete('/members/:member_id/photos/:photo_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.deleteMemberProfilePhoto);
+
+api.post('/members/:member_id/events/:event_id/photos', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postMemberProfilePhoto);
+api.delete('/members/:member_id/events/:event_id/photos/:photo_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postMemberProfilePhoto);
+
+// events, Event Model
+api.get('/members/:member_id/events', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.getMemberEvents);
+api.post('/members/:member_id/events', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postMemberEvents);
+api.get('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postMemberProfilePhoto);
+api.patch('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.deleteMemberProfilePhoto);
+api.delete('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.deleteMemberProfilePhoto);
+
+api.get('/find/events', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postMemberProfilePhoto);
+
+
 api.use(handleAPIError);
 app.use('/api', api);
 
@@ -164,7 +178,10 @@ function handleAPIError(err, req, res, next) {
     let message = "";
     switch (err.status) {
         case 401:
-            message = "Unauthorized: JWT is not correct";
+            message = "401 Unauthorized: JWT is not correct";
+            break;
+        case 403:
+            message = "403 Forbidden: No permission";
             break;
         default:
             console.log(err);
