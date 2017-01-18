@@ -8,8 +8,7 @@ const eventSchema = new mongoose.Schema({
     duration: String, // Scheduled event duration in milliseconds, if an end time is specified by the organizer. When not present, a default of 3 hours may be assumed by applications
     photos: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Photo",
-        validate: [mongoFieldUpperLimitValidation(8), "{PATH} exceeds the limit of 8"]
+        ref: "Photo"
     }],
     eventHosts: [{ // List of members hosting the event, returned when fields request parameter value includes 'event_hosts'
         type: mongoose.Schema.Types.ObjectId,
@@ -23,6 +22,8 @@ const eventSchema = new mongoose.Schema({
     status: String, // "cancelled", "upcoming", "past", "proposed", "suggested", or "draft"
 
 }, {timestamps: true});
+
+eventSchema.path('photos').validate(mongoFieldUpperLimitValidation(8), "{PATH} exceeds the limit of 8");
 
 const Event = mongoose.model('Event', eventSchema);
 

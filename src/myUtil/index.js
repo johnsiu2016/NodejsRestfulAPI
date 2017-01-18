@@ -103,11 +103,7 @@ export const upload = multer({
     }
 });
 
-export function photoUpload(req, res) {
-    if (req.user.profile.photos.length >= 8) {
-        return res.json(apiOutputTemplate("error", "profile.photos exceeds the limit of 8"));
-    }
-
+export function photoUpload(req, res, cb) {
     upload.single('photo')(req, res, (err) => {
         // This err is multer specific one, which sucks.
         if (err) {
@@ -136,7 +132,7 @@ export function photoUpload(req, res) {
         sharp.cache(false);
         sharp(req.file.path).resize(width, height).toFile(outputPath, (err, info) => {
             if (err) {
-                return res.json(exports.apiOutputTemplate("error", err, {info: info}));
+                return res.json(apiOutputTemplate("error", err, {info: info}));
             }
 
             const photoURL = `${req.protocol}://${req.get('host')}/uploads/${path.parse(outputPath).base}`;
@@ -147,14 +143,40 @@ export function photoUpload(req, res) {
                 photoURL: photoURL,
                 highresURL: highresURL,
                 baseUrl: baseUrl,
-                type: "member"
+                type: req.params.event_id ? "event" : "member"
             });
 
             photo.save((err, savedPhoto) => {
                 if (err) return console.log(err);
 
-                return savedPhoto;
+                cb(savedPhoto);
             });
         });
-    })
+    });
+}
+
+// delete photo doc and delete actual photo
+export function photoDelete(req, res) {
+    const dirName = path.join(process.cwd(), 'uploads');
+
+    Photo.findById(req.params.photo_id, (err, foundPhoto) => {
+        if (!foundPhoto) return res.json(apiOutputTemplate("error", `${req.params.photo_id} is not found`));
+
+        const photoURL = foundPhoto.photoURL;
+        const highresURL = foundPhoto.highresURL;
+
+        [photoURL, highresURL].forEach((URL) => {
+            const fileName = path.parse(URL).base;
+            const filePath = path.join(dirName, fileName);
+
+            fs.unlink(filePath, (err) => {
+                if (err) console.log(err);
+            });
+        });
+
+        foundPhoto.remove((err) => {
+            if (err) console.log(err);
+            return;
+        });
+    });
 }

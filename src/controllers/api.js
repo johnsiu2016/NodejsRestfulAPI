@@ -9,6 +9,8 @@ const sharp = require('sharp');
 const myUtil = require('../myUtil');
 const apiOutputTemplate = myUtil.apiOutputTemplate;
 const moment = require('moment');
+import path from 'path';
+import fs from 'fs';
 
 const async = require('async');
 const graph = require('fbgraph');
@@ -263,84 +265,92 @@ exports.patchMemberProfile = (req, res) => {
     });
 };
 
-exports.postMemberProfilePhoto = (req, res) => {
-    let savedPhoto = myUtil.photoUpload(req, res);
-
-    const user = req.user;
-    const profile = req.user.profile;
-
-    if (!profile.avatar) {
-        profile.avatar = savedPhoto.id;
+exports.postMemberPhoto = (req, res) => {
+    if (req.user.profile.photos.length >= 8) {
+        return res.json(apiOutputTemplate("error", "profile.photos exceeds the limit of 8"));
     }
-    user.profile.photos.push(savedPhoto.id);
 
-    user.save((err, savedUser) => {
-        if (err) return res.json(apiOutputTemplate("error", err.errors));
+    myUtil.photoUpload(req, res, (savedPhoto) => {
+        const user = req.user;
+        const profile = req.user.profile;
 
-        Photo.populate(savedUser, {
-            path: "profile.photos profile.avatar",
-            select: "photoURL highresURL"
-        }, (err, populatedSavedUser) => {
+        if (!profile.avatar) {
+            profile.avatar = savedPhoto._id;
+        }
+        user.profile.photos.push(savedPhoto._id);
+
+        user.save((err, savedUser) => {
             if (err) return res.json(apiOutputTemplate("error", err.errors));
 
-            return res.json(apiOutputTemplate("success", 'success', {profile: populatedSavedUser.profile}));
+            Photo.populate(savedUser, {
+                path: "profile.photos profile.avatar",
+                select: "photoURL highresURL"
+            }, (err, populatedSavedUser) => {
+                if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+                return res.json(apiOutputTemplate("success", 'success', {profile: populatedSavedUser.profile}));
+            });
         });
     });
 };
 
 // delete method do not have user found in passport now
-exports.deleteMemberProfilePhoto = (req, res) => {
-    const dirName = path.join(process.cwd(), 'uploads');
+exports.deleteMemberPhoto = (req, res) => {
+    // one to one ref delete
+    // delete photo doc and delete actual photo
+    myUtil.photoDelete(req, res);
 
-    Photo.findById(req.params.photo_id, (err, foundPhoto) => {
-        if (!foundPhoto) return res.json(apiOutputTemplate("error", `${req.params.photo_id} is not found`));
+    // delete user doc
+    // use findById, because I need to update avatar using current value but single update operation does not provide current field value
+    User.findById(req.params.member_id, (err, foundUser) => {
+        let profile = foundUser.profile;
 
-        const photoURL = foundPhoto.photoURL;
-        const highresURL = foundPhoto.highresURL;
+        profile.photos = profile.photos.filter((photo) => photo != req.params.photo_id);
+        // use double equal, because javascript string type != mongoose string type
+        if (req.params.photo_id == profile.avatar) {
+            profile.avatar = profile.photos[0];
+        }
 
-        [photoURL, highresURL].forEach((URL) => {
-            const fileName = path.parse(URL).base;
-            const filePath = path.join(dirName, fileName);
-
-            fs.unlink(filePath, (err) => {
-                if (err) console.log(err);
-            });
-        });
-
-        // delete method do not have user found in passport now
-        foundPhoto.remove((err) => {
+        foundUser.save((err, savedUser) => {
             if (err) console.log(err);
 
-            // use findById, because I need to update avatar using current value but single update operation does not provide current field value
-            User.findById(req.params.member_id, (err, foundUser) => {
-                let profile = foundUser.profile;
+            Photo.populate(savedUser, {
+                path: "profile.photos profile.avatar",
+                select: "photoURL highresURL"
+            }, (err, populatedSavedUser) => {
+                if (err) return res.json(apiOutputTemplate("error", err.errors));
 
-                profile.photos = profile.photos.filter((photo) => photo != req.params.photo_id);
-                // use double equal, because javascript string type != mongoose string type
-                if (req.params.photo_id == profile.avatar) {
-                    profile.avatar = profile.photos[0];
-                }
+                return res.json(apiOutputTemplate("success", 'success', {profile: populatedSavedUser.profile}));
+            });
+        });
+    });
 
-                foundUser.save((err, savedUser) => {
-                    if (err) console.log(err);
+    // User.update({_id: req.user.id}, {$pull: {"profile.photos": req.params.photo_id}}, (err, numberAffected) => {
+    //     if (err) console.log(err);
+    //
+    //     return res.json(apiOutputTemplate("success", "Photos has been deleted from user.", {numberAffected: numberAffected}));
+    // });
+};
 
-                    Photo.populate(savedUser, {
-                        path: "profile.photos profile.avatar",
-                        select: "photoURL highresURL"
-                    }, (err, populatedSavedUser) => {
-                        if (err) return res.json(apiOutputTemplate("error", err.errors));
+exports.postEventPhoto = (req, res) => {
+    myUtil.photoUpload(req, res, (savedPhoto) => {
+        Event.findById(req.params.event_id, (err, foundEvent) => {
+            if (err) console.log(err);
 
-                        return res.json(apiOutputTemplate("success", 'success', {profile: populatedSavedUser.profile}));
-                    });
+            foundEvent.photos.push(savedPhoto._id);
+            foundEvent.save((err, savedEvent) => {
+                if (err) console.log(err);
+
+                Photo.populate(savedEvent, {
+                    path: "photos",
+                    select: "photoURL highresURL"
+                }, (err, populatedSavedEvent) => {
+                    if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+                    return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
                 });
             });
-
-            // User.update({_id: req.user.id}, {$pull: {"profile.photos": req.params.photo_id}}, (err, numberAffected) => {
-            //     if (err) console.log(err);
-            //
-            //     return res.json(apiOutputTemplate("success", "Photos has been deleted from user.", {numberAffected: numberAffected}));
-            // });
-        })
+        });
     });
 };
 
