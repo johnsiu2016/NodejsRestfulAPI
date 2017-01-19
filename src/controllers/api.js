@@ -298,38 +298,38 @@ exports.postMemberPhoto = (req, res) => {
 exports.deleteMemberPhoto = (req, res) => {
     // one to one ref delete
     // delete photo doc and delete actual photo
-    myUtil.photoDelete(req, res);
+    myUtil.photoDelete(req, res, () => {
+        // delete user doc
+        // use findById, because I need to update avatar using current value but single update operation does not provide current field value
+        User.findById(req.params.member_id, (err, foundUser) => {
+            let profile = foundUser.profile;
 
-    // delete user doc
-    // use findById, because I need to update avatar using current value but single update operation does not provide current field value
-    User.findById(req.params.member_id, (err, foundUser) => {
-        let profile = foundUser.profile;
+            profile.photos = profile.photos.filter((photo) => photo != req.params.photo_id);
+            // use double equal, because javascript string type != mongoose string type
+            if (req.params.photo_id == profile.avatar) {
+                profile.avatar = profile.photos[0];
+            }
 
-        profile.photos = profile.photos.filter((photo) => photo != req.params.photo_id);
-        // use double equal, because javascript string type != mongoose string type
-        if (req.params.photo_id == profile.avatar) {
-            profile.avatar = profile.photos[0];
-        }
+            foundUser.save((err, savedUser) => {
+                if (err) console.log(err);
 
-        foundUser.save((err, savedUser) => {
-            if (err) console.log(err);
+                Photo.populate(savedUser, {
+                    path: "profile.photos profile.avatar",
+                    select: "photoURL highresURL"
+                }, (err, populatedSavedUser) => {
+                    if (err) return res.json(apiOutputTemplate("error", err.errors));
 
-            Photo.populate(savedUser, {
-                path: "profile.photos profile.avatar",
-                select: "photoURL highresURL"
-            }, (err, populatedSavedUser) => {
-                if (err) return res.json(apiOutputTemplate("error", err.errors));
-
-                return res.json(apiOutputTemplate("success", 'success', {profile: populatedSavedUser.profile}));
+                    return res.json(apiOutputTemplate("success", 'success', {profile: populatedSavedUser.profile}));
+                });
             });
         });
-    });
 
-    // User.update({_id: req.user.id}, {$pull: {"profile.photos": req.params.photo_id}}, (err, numberAffected) => {
-    //     if (err) console.log(err);
-    //
-    //     return res.json(apiOutputTemplate("success", "Photos has been deleted from user.", {numberAffected: numberAffected}));
-    // });
+        // User.update({_id: req.user.id}, {$pull: {"profile.photos": req.params.photo_id}}, (err, numberAffected) => {
+        //     if (err) console.log(err);
+        //
+        //     return res.json(apiOutputTemplate("success", "Photos has been deleted from user.", {numberAffected: numberAffected}));
+        // });
+    });
 };
 
 exports.postEventPhoto = (req, res) => {
@@ -338,6 +338,33 @@ exports.postEventPhoto = (req, res) => {
             if (err) console.log(err);
 
             foundEvent.photos.push(savedPhoto._id);
+            foundEvent.save((err, savedEvent) => {
+                if (err) res.json(apiOutputTemplate("error", err.errors.photos.message));
+
+                Photo.populate(savedEvent, {
+                    path: "photos",
+                    select: "photoURL highresURL"
+                }, (err, populatedSavedEvent) => {
+                    if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+                    return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
+                });
+            });
+        });
+    });
+};
+
+// delete method do not have user found in passport now
+exports.deleteEventPhoto = (req, res) => {
+    // one to one ref delete
+    // delete photo doc and delete actual photo
+    myUtil.photoDelete(req, res, () => {
+        // delete user doc
+        // use findById, because I need to update avatar using current value but single update operation does not provide current field value
+        Event.findById(req.params.event_id, (err, foundEvent) => {
+            if (err) console.log(err);
+
+            foundEvent.photos = foundEvent.photos.filter((photo) => photo != req.params.photo_id);
             foundEvent.save((err, savedEvent) => {
                 if (err) console.log(err);
 
@@ -354,7 +381,7 @@ exports.postEventPhoto = (req, res) => {
     });
 };
 
-exports.getMemberEvents = (req, res) => {
+exports.getMemberEventsList = (req, res) => {
     Event.populate(req.user, {
         path: "events"
     }, (err, populatedUser) => {
@@ -364,10 +391,23 @@ exports.getMemberEvents = (req, res) => {
     });
 };
 
+exports.getMemberEvent = (req, res) => {
+    Event.findById(req.params.event_id, (err, foundEvent) => {
+       Photo.populate(foundEvent, {
+           path: "photos",
+           select: "photoURL highresURL"
+       }, (err, populatedEvent) => {
+           if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+           return res.json(apiOutputTemplate("success", 'success', {events: populatedEvent}));
+       });
+    });
+};
+
 myUtil.configNumeral();
 const numeral = require('numeral');
 
-exports.postMemberEvents = (req, res) => {
+exports.postMemberEvent = (req, res) => {
     const validationSchema = {
         "name": {
             notEmpty: true,
@@ -441,6 +481,89 @@ exports.postMemberEvents = (req, res) => {
             user.save((err, savedUser) => {
                 if (err) return console.log(err);
                 return res.json(apiOutputTemplate("success", 'success', {events: savedUser.events}));
+            });
+        });
+    });
+};
+
+exports.patchMemberEvent = (req, res) => {
+    const validationSchema = {
+        "name": {
+            notEmpty: true,
+            isLength: {
+                options: [{max: 25}],
+                errorMessage: "The length of name should not exceed 25 characters."
+            },
+            errorMessage: "Name is required."
+        },
+        "description": {
+            notEmpty: true,
+            isLength: {
+                options: [{max: 200}],
+                errorMessage: "The length of name should not exceed 200 characters."
+            },
+            errorMessage: "Description is required."
+        },
+        "time": {
+            isDate: {
+                errorMessage: "Date is not valid. Example of valid date: 2017-01-18 15:00:00"
+            }
+        },
+        "duration": {
+            isNumeric: {
+                errorMessage: "Duration is not valid."
+            },
+            errorMessage: "Duration is required."
+        },
+        "fee": {
+            isNumeric: {
+                errorMessage: "Fee is not valid."
+            }
+        },
+        "status": {
+            isIn: {
+                options: [["cancelled", "upcoming", "past", "proposed", "suggested", "draft"]],
+                errorMessage: `status should be one of the value of the list ${["cancelled", "upcoming", "past", "proposed", "suggested", "draft"]}.`
+            }
+        }
+    };
+
+    req.checkBody(validationSchema);
+    req.getValidationResult().then(function (result) {
+        const errors = result.array();
+
+        if (!result.isEmpty()) {
+            return res.json(apiOutputTemplate("error", errors));
+        }
+
+        req.sanitize('name').escape();
+        req.sanitize('name').trim();
+        req.sanitize('description').escape();
+        req.sanitize('description').trim();
+
+        Event.findById(req.params.event_id, (err, foundEvent) =>{
+            if (err) console.log(err);
+
+            let body = req.body;
+
+            foundEvent.name = body.name;
+            foundEvent.description = body.description;
+            foundEvent.time = moment(req.body.time).format("dddd, MMMM Do YYYY, h:mm:ss a");
+            foundEvent.duration = myUtil.processTimeDuration(body.duration);
+            foundEvent.fee = numeral(body.fee).format('$0,0');
+            foundEvent.status = body.status;
+
+            foundEvent.save((err, savedEvent) => {
+                if (err) return console.log(err);
+
+                Photo.populate(savedEvent, {
+                    path: "photos",
+                    select: "photoURL highresURL"
+                }, (err, populatedSavedEvent) => {
+                    if (err) return res.json(apiOutputTemplate("error", err.errors));
+
+                    return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
+                });
             });
         });
     });

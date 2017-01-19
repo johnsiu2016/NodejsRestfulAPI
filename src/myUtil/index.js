@@ -103,6 +103,7 @@ export const upload = multer({
     }
 });
 
+// update photo doc and upload actual photo
 export function photoUpload(req, res, cb) {
     upload.single('photo')(req, res, (err) => {
         // This err is multer specific one, which sucks.
@@ -156,7 +157,7 @@ export function photoUpload(req, res, cb) {
 }
 
 // delete photo doc and delete actual photo
-export function photoDelete(req, res) {
+export function photoDelete(req, res, cb) {
     const dirName = path.join(process.cwd(), 'uploads');
 
     Photo.findById(req.params.photo_id, (err, foundPhoto) => {
@@ -176,7 +177,8 @@ export function photoDelete(req, res) {
 
         foundPhoto.remove((err) => {
             if (err) console.log(err);
-            return;
+
+            cb();
         });
     });
 }

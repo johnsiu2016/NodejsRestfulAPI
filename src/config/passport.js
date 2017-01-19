@@ -59,6 +59,7 @@ passport.use(new JwtStrategy({
             return done({status: 403}, false);
         }
     }
+    return done(null, true);
 }));
 
 /**

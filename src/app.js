@@ -158,14 +158,14 @@ api.patch('/members/:member_id', passport.authenticate('jwt', {failWithError: tr
 api.post('/members/:member_id/photos', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postMemberPhoto);
 api.delete('/members/:member_id/photos/:photo_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.deleteMemberPhoto);
 // event photo
-api.post('/members/:member_id/events/:event_id/photos', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventPhoto);
-api.delete('/members/:member_id/events/:event_id/photos/:photo_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventPhoto);
+api.post('/events/:event_id/photos', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventPhoto);
+api.delete('/events/:event_id/photos/:photo_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.deleteEventPhoto);
 
 // events, Event Model
-api.get('/members/:member_id/events', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.getMemberEvents);
-api.post('/members/:member_id/events', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postMemberEvents);
-api.get('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventPhoto);
-api.patch('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventPhoto);
+api.get('/members/:member_id/events', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.getMemberEventsList);
+api.post('/members/:member_id/events', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postMemberEvent);
+api.get('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.getMemberEvent);
+api.patch('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.patchMemberEvent);
 api.delete('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventPhoto);
 
 api.get('/find/events', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventPhoto);
