@@ -82,7 +82,10 @@ exports.postSignup = (req, res) => {
                     id: user.id
                 }, process.env.JWTSECRET);
 
-                return res.json(apiOutputTemplate("success", 'Successfully signed up', {token: jwtToken, id: user.id}));
+                return res.json(apiOutputTemplate("success", 'Successfully signed up', {
+                    token: `JWT ${jwtToken}`,
+                    id: user.id
+                }));
             });
         });
     });
@@ -129,7 +132,10 @@ exports.postLogin = (req, res) => {
                 id: user.id
             }, process.env.JWTSECRET);
 
-            return res.json(apiOutputTemplate("success", "Successfully logged in.", {token: jwtToken, id: user.id}));
+            return res.json(apiOutputTemplate("success", "Successfully logged in.", {
+                token: `JWT ${jwtToken}`,
+                id: user.id
+            }));
 
         })(req, res);
     });
@@ -271,6 +277,8 @@ exports.postMemberPhoto = (req, res) => {
     }
 
     myUtil.photoUpload(req, res, (savedPhoto) => {
+        if (!savedPhoto) return res.json(apiOutputTemplate("error", `savedPhoto is undefined`));
+
         const user = req.user;
         const profile = req.user.profile;
 
@@ -278,9 +286,9 @@ exports.postMemberPhoto = (req, res) => {
             profile.avatar = savedPhoto._id;
         }
         user.profile.photos.push(savedPhoto._id);
-
         user.save((err, savedUser) => {
-            if (err) return res.json(apiOutputTemplate("error", err.errors));
+            if (err) console.log(err);
+            if (!savedUser) return res.json(apiOutputTemplate("error", `savedUser is undefined`));
 
             Photo.populate(savedUser, {
                 path: "profile.photos profile.avatar",
@@ -302,16 +310,18 @@ exports.deleteMemberPhoto = (req, res) => {
         // delete user doc
         // use findById, because I need to update avatar using current value but single update operation does not provide current field value
         User.findById(req.params.member_id, (err, foundUser) => {
-            let profile = foundUser.profile;
+            if (err) console.log(err);
+            if (!foundUser) return res.json(apiOutputTemplate("error", `${req.params.member_id} is not found`));
 
+            let profile = foundUser.profile;
             profile.photos = profile.photos.filter((photo) => photo != req.params.photo_id);
             // use double equal, because javascript string type != mongoose string type
             if (req.params.photo_id == profile.avatar) {
                 profile.avatar = profile.photos[0];
             }
-
             foundUser.save((err, savedUser) => {
                 if (err) console.log(err);
+                if (!savedUser) return res.json(apiOutputTemplate("error", `savedUser is undefined`));
 
                 Photo.populate(savedUser, {
                     path: "profile.photos profile.avatar",
@@ -333,19 +343,30 @@ exports.deleteMemberPhoto = (req, res) => {
 };
 
 exports.postEventPhoto = (req, res) => {
-    myUtil.photoUpload(req, res, (savedPhoto) => {
-        Event.findById(req.params.event_id, (err, foundEvent) => {
-            if (err) console.log(err);
+    Event.findById(req.params.event_id, (err, foundEvent) => {
+        if (err) console.log(err);
+        if (!foundEvent) return res.json(apiOutputTemplate("error", `${req.params.event_id} is not found`));
 
+        for (let i = 0, len = foundEvent.eventHosts.length; i < len; i++) {
+            if (foundEvent.eventHosts[i] != req.user.id) return res.json(apiOutputTemplate("error", `403 Forbidden: No permission`));
+        }
+
+        if (foundEvent.photos.length >= 8) {
+            return res.json(apiOutputTemplate("error", "Photos exceeds the limit of 8"));
+        }
+
+        myUtil.photoUpload(req, res, (savedPhoto) => {
             foundEvent.photos.push(savedPhoto._id);
             foundEvent.save((err, savedEvent) => {
-                if (err) res.json(apiOutputTemplate("error", err.errors.photos.message));
+                if (err) console.log(err);
+                if (!savedEvent) return res.json(apiOutputTemplate("error", `savedEvent is undefined`));
 
                 Photo.populate(savedEvent, {
                     path: "photos",
                     select: "photoURL highresURL"
                 }, (err, populatedSavedEvent) => {
-                    if (err) return res.json(apiOutputTemplate("error", err.errors));
+                    if (err) console.log(err);
+                    if (!savedEvent) return res.json(apiOutputTemplate("error", `populatedSavedEvent is undefined`));
 
                     return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
                 });
@@ -356,14 +377,17 @@ exports.postEventPhoto = (req, res) => {
 
 // delete method do not have user found in passport now
 exports.deleteEventPhoto = (req, res) => {
-    // one to one ref delete
-    // delete photo doc and delete actual photo
-    myUtil.photoDelete(req, res, () => {
-        // delete user doc
-        // use findById, because I need to update avatar using current value but single update operation does not provide current field value
-        Event.findById(req.params.event_id, (err, foundEvent) => {
-            if (err) console.log(err);
+    // delete user doc
+    // use findById, because I need to update avatar using current value but single update operation does not provide current field value
+    Event.findById(req.params.event_id, (err, foundEvent) => {
+        if (err) console.log(err);
+        if (!foundEvent) return res.json(apiOutputTemplate("error", `${req.params.event_id} is not found`));
 
+        for (let i = 0, len = foundEvent.eventHosts.length; i < len; i++) {
+            if (foundEvent.eventHosts[i] != req.user.id) return res.json(apiOutputTemplate("error", `403 Forbidden: No permission`));
+        }
+
+        myUtil.photoDelete(req, res, () => {
             foundEvent.photos = foundEvent.photos.filter((photo) => photo != req.params.photo_id);
             foundEvent.save((err, savedEvent) => {
                 if (err) console.log(err);
@@ -372,20 +396,23 @@ exports.deleteEventPhoto = (req, res) => {
                     path: "photos",
                     select: "photoURL highresURL"
                 }, (err, populatedSavedEvent) => {
-                    if (err) return res.json(apiOutputTemplate("error", err.errors));
+                    if (err) console.log(err);
+                    if (!savedEvent) return res.json(apiOutputTemplate("error", `populatedSavedEvent is undefined`));
 
                     return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
                 });
             });
         });
     });
+
 };
 
 exports.getMemberEventsList = (req, res) => {
     Event.populate(req.user, {
         path: "events"
     }, (err, populatedUser) => {
-        if (err) return res.json(apiOutputTemplate("error", err.errors));
+        if (err) console.log(err);
+        if (!populatedUser) return res.json(apiOutputTemplate("error", `populatedUser is undefined`));
 
         return res.json(apiOutputTemplate("success", 'success', {events: populatedUser.events}));
     });
@@ -393,14 +420,18 @@ exports.getMemberEventsList = (req, res) => {
 
 exports.getMemberEvent = (req, res) => {
     Event.findById(req.params.event_id, (err, foundEvent) => {
-       Photo.populate(foundEvent, {
-           path: "photos",
-           select: "photoURL highresURL"
-       }, (err, populatedEvent) => {
-           if (err) return res.json(apiOutputTemplate("error", err.errors));
+        if (err) console.log(err);
+        if (!foundEvent) return res.json(apiOutputTemplate("error", `${req.params.event_id} is not found`));
 
-           return res.json(apiOutputTemplate("success", 'success', {events: populatedEvent}));
-       });
+        Photo.populate(foundEvent, {
+            path: "photos",
+            select: "photoURL highresURL"
+        }, (err, populatedEvent) => {
+            if (err) console.log(err);
+            if (!populatedEvent) return res.json(apiOutputTemplate("error", `populatedEvent is undefined`));
+
+            return res.json(apiOutputTemplate("success", 'success', {events: populatedEvent}));
+        });
     });
 };
 
@@ -476,10 +507,14 @@ exports.postMemberEvent = (req, res) => {
         });
 
         event.save((err, savedEvent) => {
-            if (err) return console.log(err);
+            if (err) console.log(err);
+            if (!savedEvent) return res.json(apiOutputTemplate("error", `savedEvent is undefined`));
+
             user.events.push(savedEvent._id);
             user.save((err, savedUser) => {
-                if (err) return console.log(err);
+                if (err) console.log(err);
+                if (!savedUser) return res.json(apiOutputTemplate("error", `savedUser is undefined`));
+
                 return res.json(apiOutputTemplate("success", 'success', {events: savedUser.events}));
             });
         });
@@ -541,26 +576,27 @@ exports.patchMemberEvent = (req, res) => {
         req.sanitize('description').escape();
         req.sanitize('description').trim();
 
-        Event.findById(req.params.event_id, (err, foundEvent) =>{
+        Event.findById(req.params.event_id, (err, foundEvent) => {
             if (err) console.log(err);
+            if (!foundEvent) return res.json(apiOutputTemplate("error", `${req.params.event_id} is not found`));
 
             let body = req.body;
-
             foundEvent.name = body.name;
             foundEvent.description = body.description;
             foundEvent.time = moment(req.body.time).format("dddd, MMMM Do YYYY, h:mm:ss a");
             foundEvent.duration = myUtil.processTimeDuration(body.duration);
             foundEvent.fee = numeral(body.fee).format('$0,0');
             foundEvent.status = body.status;
-
             foundEvent.save((err, savedEvent) => {
-                if (err) return console.log(err);
+                if (err) console.log(err);
+                if (!savedEvent) return res.json(apiOutputTemplate("error", `savedEvent is undefined`));
 
                 Photo.populate(savedEvent, {
                     path: "photos",
                     select: "photoURL highresURL"
                 }, (err, populatedSavedEvent) => {
-                    if (err) return res.json(apiOutputTemplate("error", err.errors));
+                    if (err) console.log(err);
+                    if (!savedEvent) return res.json(apiOutputTemplate("error", `populatedSavedEvent is undefined`));
 
                     return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
                 });
