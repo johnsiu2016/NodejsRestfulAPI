@@ -26,10 +26,10 @@ passport.use(new JwtStrategy({
     secretOrKey: process.env.JWTSECRET,
     passReqToCallback: true
 }, function(req, jwt_payload, done) {
-    if (req.params.member_id) {
-        if (req.params.member_id === jwt_payload.id) {
-            if (req.method === "DELETE") {
-                return done(null, true);
+    if (req.params.member_id) { // check route
+        if (req.params.member_id === jwt_payload.id) { // member direct field permission
+            if (req.method === "DELETE") { // find user in the route
+                return done(null, jwt_payload);
             }
 
             User.findOne({_id: jwt_payload.id}, function(err, user) {
@@ -58,7 +58,7 @@ passport.use(new JwtStrategy({
         } else {
             return done({status: 403}, false);
         }
-    } else {
+    } else { // non member direct field permission
         return done(null, jwt_payload);
     }
 }));

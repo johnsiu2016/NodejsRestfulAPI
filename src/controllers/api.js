@@ -605,6 +605,40 @@ exports.patchMemberEvent = (req, res) => {
     });
 };
 
+exports.deleteMemberEvent = (req, res) => {
+    User.findById(req.user.id, (err, foundUser) => {
+        if (err) console.log(err);
+        if (!foundUser) return res.json(apiOutputTemplate("error", `${req.user.id} is not found`));
+
+        Event.findById(req.params.event_id, (err, foundEvent) => {
+            if (err) console.log(err);
+            if (!foundEvent) return res.json(apiOutputTemplate("error", `${req.params.event_id} is not found`));
+
+            // permission checked on passport
+
+            foundUser.events = foundUser.events.filter((eventId) => eventId != req.params.event_id);
+            foundUser.save((err, savedFoundUser) => {
+                if (err) console.log(err);
+                if (!savedFoundUser) return res.json(apiOutputTemplate("error", `savedFoundUser is undefined`));
+
+                foundEvent.remove((err, removedFoundEvent) => {
+                    if (err) console.log(err);
+                    if (!removedFoundEvent) return res.json(apiOutputTemplate("error", `removedFoundEvent is undefined`));
+
+                    Event.populate(savedFoundUser, {
+                        path: "events"
+                    }, (err, populatedSavedFoundUser) => {
+                        if (err) console.log(err);
+                        if (!populatedSavedFoundUser) return res.json(apiOutputTemplate("error", `populatedSavedFoundUser is undefined`));
+
+                        return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedFoundUser.events}));
+                    });
+                });
+            });
+        });
+    });
+};
+
 /**
  * GET /api
  * List of API examples.
