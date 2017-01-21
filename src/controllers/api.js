@@ -409,7 +409,21 @@ exports.deleteEventPhoto = (req, res) => {
 
 exports.getMemberEventsList = (req, res) => {
     Event.populate(req.user, {
-        path: "events"
+        path: "events",
+        populate: [{
+            path: "eventHosts",
+            model: "User",
+            select: "profile.name profile.gender profile.location profile.avatar",
+            populate: {
+                path: "profile.avatar",
+                model: "Photo",
+                select: "photoURL highresURL"
+            }
+        }, {
+            path: "photos",
+            model: "Photo",
+            select: "photoURL highresURL"
+        }]
     }, (err, populatedUser) => {
         if (err) console.log(err);
         if (!populatedUser) return res.json(apiOutputTemplate("error", `populatedUser is undefined`));
@@ -515,7 +529,14 @@ exports.postMemberEvent = (req, res) => {
                 if (err) console.log(err);
                 if (!savedUser) return res.json(apiOutputTemplate("error", `savedUser is undefined`));
 
-                return res.json(apiOutputTemplate("success", 'success', {events: savedUser.events}));
+                Event.populate(savedUser, {
+                    path: "events"
+                }, (err, populatedSavedUser) => {
+                    if (err) console.log(err);
+                    if (!populatedSavedUser) return res.json(apiOutputTemplate("error", `populatedSavedUser is undefined`));
+
+                    return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedUser.events}));
+                });
             });
         });
     });
