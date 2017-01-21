@@ -168,7 +168,12 @@ api.get('/members/:member_id/events/:event_id', passport.authenticate('jwt', {fa
 api.patch('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.patchMemberEvent);
 api.delete('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.deleteMemberEvent);
 
-api.get('/find/events', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventPhoto);
+api.post('/events/:event_id/venues', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventVenue);
+
+api.get('/events/find', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.getEventsFind);
+
+
+api.get("/test", apiController.test);
 
 
 api.use(handleAPIError);

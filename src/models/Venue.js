@@ -10,10 +10,10 @@ const venueSchema = new mongoose.Schema({
     phone: String,
     lat: Number,
     lon: Number,
-    events: {
-        type: [mongoose.Schema.Types.ObjectId],
+    events: [{
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Event"
-    },
+    }],
 });
 
 const Venue = mongoose.model('Venue', venueSchema);

@@ -4,7 +4,9 @@ export function apiOutputTemplate(type, message, data) {
             type: type,
             message: message
         },
-        ...data
+        response: {
+            ...data
+        }
     }
 }
 

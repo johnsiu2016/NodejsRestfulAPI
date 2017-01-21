@@ -3,6 +3,7 @@
 const User = require('../models/User');
 const Photo = require('../models/Photo');
 const Event = require('../models/Event');
+const Venue = require('../models/Venue');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const sharp = require('sharp');
@@ -423,6 +424,10 @@ exports.getMemberEventsList = (req, res) => {
             path: "photos",
             model: "Photo",
             select: "photoURL highresURL"
+        }, {
+            path: "venue",
+            model: "Venue",
+            select: "name address1 address2 address3 city country phone"
         }]
     }, (err, populatedUser) => {
         if (err) console.log(err);
@@ -658,6 +663,214 @@ exports.deleteMemberEvent = (req, res) => {
             });
         });
     });
+};
+
+exports.postEventVenue = (req, res) => {
+    const validationSchema = {
+        "name": {
+            notEmpty: true,
+            isLength: {
+                options: [{max: 25}],
+                errorMessage: "The length of name should not exceed 25 characters."
+            },
+            errorMessage: "Name is required."
+        },
+        "address1": {
+            notEmpty: true,
+            isLength: {
+                options: [{max: 100}],
+                errorMessage: "The length of name should not exceed 100 characters."
+            },
+            errorMessage: "address1 is required."
+        },
+        "address2": {
+            optional: true,
+            isLength: {
+                options: [{max: 100}],
+                errorMessage: "The length of name should not exceed 100 characters."
+            },
+            errorMessage: "address2 is required."
+        },
+        "address3": {
+            optional: true,
+            isLength: {
+                options: [{max: 100}],
+                errorMessage: "The length of name should not exceed 100 characters."
+            },
+            errorMessage: "address3 is required."
+        },
+        "city": {
+            optional: true,
+            isLength: {
+                options: [{max: 50}],
+                errorMessage: "The length of name should not exceed 50 characters."
+            },
+            errorMessage: "city is required."
+        },
+        "country": {
+            optional: true,
+            isLength: {
+                options: [{max: 50}],
+                errorMessage: "The length of name should not exceed 50 characters."
+            },
+            errorMessage: "country is required."
+        },
+        "phone": {
+            optional: true,
+            isNumeric: {
+                errorMessage: "Phone should only contains number"
+            },
+            isLength: {
+                options: [{max: 11, min: 8}],
+                errorMessage: "The length of phone should not exceed 11 characters"
+            }
+        }
+    };
+
+    req.checkBody(validationSchema);
+    req.getValidationResult().then(function (result) {
+        const errors = result.array();
+
+        if (!result.isEmpty()) {
+            return res.json(apiOutputTemplate("error", errors));
+        }
+
+        req.sanitize('name').escape();
+        req.sanitize('name').trim();
+        req.sanitize('address1').escape();
+        req.sanitize('address1').trim();
+        req.sanitize('address2').escape();
+        req.sanitize('address2').trim();
+        req.sanitize('address3').escape();
+        req.sanitize('address3').trim();
+        req.sanitize('city').escape();
+        req.sanitize('city').trim();
+        req.sanitize('country').escape();
+        req.sanitize('country').trim();
+
+        Event.findById(req.params.event_id, (err, foundEvent) => {
+            if (err) console.log(err);
+            if (!foundEvent) return res.json(apiOutputTemplate("error", `foundEvent is undefined`));
+
+            for (let i = 0, len = foundEvent.eventHosts.length; i < len; i++) {
+                if (foundEvent.eventHosts[i] != req.user.id) return res.json(apiOutputTemplate("error", `403 Forbidden: No permission`));
+            }
+
+            let body = req.body;
+
+            let venue = new Venue({
+                name: body.name,
+                address1: body.address1,
+                address2: body.address2,
+                address3: body.address3,
+                city: body.city,
+                country: body.country,
+            });
+            venue.events.push(req.params.event_id);
+            venue.save((err, savedVenue) => {
+                if (err) console.log(err);
+                if (!savedVenue) return res.json(apiOutputTemplate("error", `savedVenue is undefined`));
+
+                foundEvent.venue = savedVenue._id;
+                foundEvent.save((err, savedFoundEvent) => {
+                    if (err) console.log(err);
+                    if (!savedFoundEvent) return res.json(apiOutputTemplate("error", `savedFoundEvent is undefined`));
+
+                    Venue.populate(savedFoundEvent, [{
+                        path: "venue",
+                        select: "name address1 address2 address3 city country phone"
+                    }, {
+                        path: "eventHosts",
+                        model: "User",
+                        select: "profile.name profile.gender profile.location profile.avatar",
+                        populate: {
+                            path: "profile.avatar",
+                            model: "Photo",
+                            select: "photoURL highresURL"
+                        }
+                    }, {
+                        path: "photos",
+                        model: "Photo",
+                        select: "photoURL highresURL"
+                    }], (err, populatedSavedFoundEvent) => {
+                        if (err) console.log(err);
+                        if (!populatedSavedFoundEvent) return res.json(apiOutputTemplate("error", `populatedSavedFoundEvent is undefined`));
+
+                        return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedFoundEvent}));
+                    });
+                });
+            });
+        });
+    });
+};
+
+exports.getEventsFind = (req, res) => {
+    Event.find({}).populate([{
+        path: "eventHosts",
+        model: "User",
+        select: "profile.name profile.gender profile.location profile.avatar",
+        populate: {
+            path: "profile.avatar",
+            model: "Photo",
+            select: "photoURL highresURL"
+        }
+    }, {
+        path: "photos",
+        model: "Photo",
+        select: "photoURL highresURL"
+    }, {
+        path: "venue",
+        model: "Venue",
+        select: "name address1 address2 address3 city country phone"
+    }]).exec((err, foundEvents) => {
+        if (err) console.log(err);
+        if (!foundEvents) return res.json(apiOutputTemplate("error", `foundEvents is undefined`));
+
+        return res.json(apiOutputTemplate("success", 'success', {events: foundEvents}));
+    });
+};
+
+const googlePlaces = require("googleplaces");
+const googlePlacesAPI = googlePlaces(process.env.GOOGLE_PLACE_API_KEY, "json");
+
+exports.test = (req, res) => {
+    let parameters;
+
+    // parameters = {
+    //     query:"restaurants"
+    // };
+    // googlePlacesAPI.textSearch(parameters, function (err, response) {
+    //     return res.json(apiOutputTemplate("success", 'success', {response: response}));
+    // });
+
+    // parameters = {
+    //     input:"fanling"
+    // };
+    // googlePlacesAPI.placeAutocomplete(parameters, function (err, response) {
+    //     return res.json(apiOutputTemplate("success", 'success', {...response}));
+    // });
+
+    parameters = {
+        query: "fanling"
+    };
+
+    googlePlacesAPI.textSearch(parameters, function (error, response) {
+        if (error) throw error;
+        googlePlacesAPI.placeDetailsRequest({reference: response.results[0].reference}, function (error, response) {
+            if (error) throw error;
+            return res.json(apiOutputTemplate("success", 'success', {...response}));
+        });
+    });
+
+    // parameters = {
+    //     location:[-33.8670522, 151.1957362],
+    //     types:"doctor"
+    // };
+    // googlePlacesAPI.placeSearch(parameters, function (response) {
+    //     googlePlacesAPI.placeDetailsRequest({reference:response.results[0].reference}, function (response) {
+    //         console.log(response.result);
+    //     });
+    // });
 };
 
 /**
