@@ -172,11 +172,14 @@ the Authentication header
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Successfully signed up"</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4NzM4N2ZlZDg4MjAwMWYzMGY2YTU5YyIsImlhdCI6MTQ4Mzk2NjQ2Mn0.5rp4tBTQrRoAbcBrTTNNtTYNo-QAF0G70wlbmI-30tE"</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Successfully signed up"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4ODM0ZWI2NzNmYTRiMWFkOGJhMTJkNyIsImlhdCI6MTQ4NTAwMDM3NH0.FrpiAA8cvuX_1T5fF2a1mWRdra-zdFu2HBUeNoFVMMQ"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint creates account for user.</p>
@@ -222,11 +225,14 @@ Remember — Put your API Key in all request, including this.
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Successfully logged in."</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4NzM4N2ZlZDg4MjAwMWYzMGY2YTU5YyIsImlhdCI6MTQ4Mzk2NjYxMn0.QnHYRjYtTux8ctvwZZhTjQ2Zc7XAsq_u4CMJMEhuc9I"</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Successfully logged in."</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4ODM0ZWI2NzNmYTRiMWFkOGJhMTJkNyIsImlhdCI6MTQ4NTAwMDQwOX0.XrmhHgdozFZ4bH99ZTkkMLLczl30Cy1Eb33r8FxVtpQ"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint logins the user.</p>
@@ -259,29 +265,31 @@ Remember — Put your API Key in all request, including this.
 <h1 id="user-information">User Information</h1>
 
 <h2 id="account">Account</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/account?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/members/:member_id?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aad34dwqe56456qe@asds.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"userProfile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"male"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hong Kong"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"pictures"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aa3dfg456aasdsdaqe@asds.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"male"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hong Kong"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint gets user account information.</p>
 
 <h3 id="http-get-request">HTTP GET Request</h3>
 
-<p><code class="prettyprint">GET https://young-cove-95141.herokuapp.com/api/account</code></p>
+<p><code class="prettyprint">GET https://young-cove-95141.herokuapp.com/api/members/:member_id</code></p>
 
 <h3 id="get-parameters">GET Parameters</h3>
 
@@ -292,39 +300,35 @@ Remember — Put the user token in all user-specific request through the Authent
 </aside>
 
 <h2 id="account-profile">Account Profile</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/account/profile?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span> -d <span class="s2">"email=abctest@abc.com&amp;name=johnsiu&amp;gender=male&amp;location=HK&amp;phone=12345678&amp;website=www.abc.com&amp;avatar=www.abc.com/image.jpeg"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/members/:member_id?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span> -d <span class="s2">"email=abctest@abc.com&amp;name=johnsiu&amp;gender=male&amp;location=HK&amp;phone=12345678&amp;website=www.abc.com&amp;avatar=www.abc.com/image.jpeg"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Profile information has been updated."</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"屎劣, 屎昨 4123 @@! &amp;lt;script&amp;gt;alert(&amp;#x27;asdas&amp;#x27;)&amp;lt;&amp;#x2F;script&amp;gt;"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"pictures"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="s2">"http://localhost:3000/uploads/d677290d6feee3c1c0bceb6d6872e3dd_1000_800_1483962657837.jpg"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"http://localhost:3000/uploads/de4675181c2c1ab4f6e9020415070446_1000_800_1483963014833.jpg"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"http://localhost:3000/uploads/63657465d2b4fa4fdffbb42e856e3f5a_1000_800_1483963015226.jpg"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"http://localhost:3000/uploads/591c58c43ba626967db22eada2a75523_1000_800_1483963015496.jpg"</span><span class="w">
-    </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.johnssadasdsadsaaaaaaaassssssssssssssssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaadadadadadadadadadadadadiu.comasd"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567811"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/591c58c43ba626967db22eada2a75523_1000_800_1483963015496.jpg"</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+            </span><span class="nt">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.johnssadasdsadsaaaaaaaassssssssssssssssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaadadadadadadadadadadadadiu.comasd"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567811"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint updates user account information.</p>
 
-<h3 id="http-post-request">HTTP POST Request</h3>
+<h3 id="http-patch-request">HTTP PATCH Request</h3>
 
-<p><code class="prettyprint">POST https://young-cove-95141.herokuapp.com/api/account/profile</code></p>
+<p><code class="prettyprint">PATCH https://young-cove-95141.herokuapp.com/api/members/:member_id</code></p>
 
-<h3 id="post-parameters">POST Parameters</h3>
+<h3 id="patch-parameters">PATCH Parameters</h3>
 
 <table><thead>
 <tr>
@@ -366,29 +370,54 @@ Remember — Put the user token in all user-specific request through the Authent
 <tr>
 <td>avatar</td>
 <td>Yes</td>
-<td>Valid URL, and cannot exceed 200 characters.</td>
+<td>MongoDB ID.</td>
 </tr>
 </tbody></table>
 
 <h2 id="user-avatars-upload">User avatars upload</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/upload?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span> -F <span class="s2">"width=1000"</span> -F <span class="s2">"height=800"</span> -F <span class="s2">"picture=@/c/Users/John Siu/Desktop/1418878_1e92283336.jpg"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://young-cove-95141.herokuapp.com/api/members/:member_id/photos?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span> -F <span class="s2">"width=1000"</span> -F <span class="s2">"height=800"</span> -F <span class="s2">"photo=@/c/Users/John Siu/Desktop/1418878_1e92283336.jpg"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"imageURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/ab0c2ed7bbde50b04461c355beb30dfa_1000_800_1483968993297.jpg"</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883506773fa4b1ad8ba12d8"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f8c1c25632dcaf7117fff4526f071e83_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f8c1c25632dcaf7117fff4526f071e83.png"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883506773fa4b1ad8ba12d8"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f8c1c25632dcaf7117fff4526f071e83_320_240.png"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f8c1c25632dcaf7117fff4526f071e83.png"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nt">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.johnssadasdsadsaaaaaaaassssssssssssssssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaadadadadadadadadadadadadiu.comasd"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567811"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint uploads an image to the server</p>
 
 <h3 id="http-post-request">HTTP POST Request</h3>
 
-<p><code class="prettyprint">POST https://young-cove-95141.herokuapp.com/api/upload</code></p>
+<p><code class="prettyprint">POST https://young-cove-95141.herokuapp.com/api/members/:member_id/photos</code></p>
 
 <h3 id="post-parameters">POST Parameters</h3>
 
@@ -400,7 +429,7 @@ Remember — Put the user token in all user-specific request through the Authent
 </tr>
 </thead><tbody>
 <tr>
-<td>picture</td>
+<td>photo</td>
 <td>No</td>
 <td>image data</td>
 </tr>
@@ -417,30 +446,328 @@ Remember — Put the user token in all user-specific request through the Authent
 </tbody></table>
 
 <h2 id="user-avatars-delete">User avatars delete</h2>
-<pre class="highlight shell"><code>curl -X <span class="s2">"DELETE"</span> <span class="s2">"https://young-cove-95141.herokuapp.com/api/upload?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span> -d <span class="s2">"pictures=http://young-cove-95141.herokuapp.com/uploads/b4914a227e016711cb82214ec4a72010_1000_800_1484018175917.jpg&amp;pictures=http://young-cove-95141.herokuapp.com/uploads/c8685c7e15cdbb0f16587610653d40bf_1000_800_1484018050414.jpg"</span>
+<pre class="highlight shell"><code>curl -X <span class="s2">"DELETE"</span> <span class="s2">"https://young-cove-95141.herokuapp.com/api/members/:member_id/photos/:photo_id?apikey=API_KEY"</span> -H <span class="s2">"Authorization: JWT USER_TOKEN"</span> -d <span class="s2">"pictures=http://young-cove-95141.herokuapp.com/uploads/b4914a227e016711cb82214ec4a72010_1000_800_1484018175917.jpg&amp;pictures=http://young-cove-95141.herokuapp.com/uploads/c8685c7e15cdbb0f16587610653d40bf_1000_800_1484018050414.jpg"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Pictures has been deleted from user."</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"pictures"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="s2">"http://localhost:3000/uploads/9e0a2d9148bb019a6764e462a21c3355_1000_800_1483969209063.jpg"</span><span class="w">
-    </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nt">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.johnssadasdsadsaaaaaaaassssssssssssssssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaadadadadadadadadadadadadiu.comasd"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567811"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint deletes images of user already uploaded images to the server</p>
 
 <h3 id="http-delete-request">HTTP DELETE Request</h3>
 
-<p><code class="prettyprint">DELETE https://young-cove-95141.herokuapp.com/api/upload</code></p>
+<p><code class="prettyprint">DELETE https://young-cove-95141.herokuapp.com/api/members/:member_id/photos/:photo_id</code></p>
 
 <h3 id="delete-parameters">DELETE Parameters</h3>
+
+<p>No parameters require.</p>
+
+<h1 id="events">Events</h1>
+
+<h2 id="get-member-events">Get Member Events</h2>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883524c73fa4b1ad8ba12da"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:24:09.714Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:21:32.234Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saturday, January 21st 2017, 3:00:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 999,999"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352ca73fa4b1ad8ba12dc"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e373fa4b1ad8ba12dd"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81.png"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e973fa4b1ad8ba12de"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba.png"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352a273fa4b1ad8ba12db"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:22:58.489Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:22:58.489Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tuesday, January 17th 2017, 11:24:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 1,000"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352f173fa4b1ad8ba12df"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:24:17.992Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:24:17.992Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tuesday, January 17th 2017, 11:24:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 1,000"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint gets events list of the member</p>
+
+<h3 id="http-get-request">HTTP GET Request</h3>
+
+<p><code class="prettyprint">GET /members/:member_id/events</code></p>
+
+<h3 id="get-parameters">GET Parameters</h3>
+
+<p>No parameters require.</p>
+
+<h2 id="post-member-events">Post Member Events</h2>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883524c73fa4b1ad8ba12da"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:24:09.714Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:21:32.234Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saturday, January 21st 2017, 3:00:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 999,999"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352ca73fa4b1ad8ba12dc"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e373fa4b1ad8ba12dd"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81.png"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e973fa4b1ad8ba12de"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba.png"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352a273fa4b1ad8ba12db"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:22:58.489Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:22:58.489Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tuesday, January 17th 2017, 11:24:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 1,000"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352f173fa4b1ad8ba12df"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:24:17.992Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:24:17.992Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tuesday, January 17th 2017, 11:24:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 1,000"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588354ef7f8fcb170cef38a7"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:32:47.487Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:32:47.487Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tuesday, January 17th 2017, 11:24:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 1,000"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint posts event to the member</p>
+
+<h3 id="http-post-request">HTTP POST Request</h3>
+
+<p><code class="prettyprint">POST /members/:member_id/events</code></p>
+
+<h3 id="post-parameters">POST Parameters</h3>
 
 <table><thead>
 <tr>
@@ -450,25 +777,765 @@ Remember — Put the user token in all user-specific request through the Authent
 </tr>
 </thead><tbody>
 <tr>
-<td>pictures</td>
+<td>name</td>
 <td>No</td>
-<td>image url</td>
+<td>event name</td>
 </tr>
 <tr>
-<td>pictures</td>
+<td>description</td>
 <td>No</td>
-<td>image url</td>
+<td>event description</td>
 </tr>
 <tr>
-<td>pictures</td>
+<td>time</td>
 <td>No</td>
-<td>image url</td>
+<td>event host time, eg: 2017-01-17 15:00:00</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>No</td>
+<td>event duration (unit: hours), eg: 72</td>
+</tr>
+<tr>
+<td>fee</td>
+<td>No</td>
+<td>event fee (unit: HKD)</td>
+</tr>
+<tr>
+<td>status</td>
+<td>No</td>
+<td>event status, one of the [&ldquo;cancelled&rdquo;, &ldquo;upcoming&rdquo;, &ldquo;past&rdquo;, &ldquo;proposed&rdquo;, &ldquo;suggested&rdquo;, &ldquo;draft&rdquo;]</td>
 </tr>
 </tbody></table>
 
-<aside class="success">
-You can provide multiple parameters of the same name
-</aside>
+<h2 id="get-member-event">Get Member Event</h2>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883524c73fa4b1ad8ba12da"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:24:09.714Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:21:32.234Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saturday, January 21st 2017, 3:00:00 pm"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 999,999"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352ca73fa4b1ad8ba12dc"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e373fa4b1ad8ba12dd"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81.png"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e973fa4b1ad8ba12de"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba.png"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint posts event to the member</p>
+
+<h3 id="http-get-request">HTTP GET Request</h3>
+
+<p><code class="prettyprint">GET /members/:member_id/events/:event_id</code></p>
+
+<h3 id="get-parameters">GET Parameters</h3>
+
+<p>No parameters require.</p>
+
+<h2 id="patch-member-event">PATCH Member Event</h2>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883524c73fa4b1ad8ba12da"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:24:09.714Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:21:32.234Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saturday, January 21st 2017, 3:00:00 pm"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 999,999"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352ca73fa4b1ad8ba12dc"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e373fa4b1ad8ba12dd"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81.png"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e973fa4b1ad8ba12de"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba.png"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint patch event of the member</p>
+
+<h3 id="http-patch-request">HTTP PATCH Request</h3>
+
+<p><code class="prettyprint">PATCH /members/:member_id/events/:event_id</code></p>
+
+<h3 id="patch-parameters">PATCH Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Optional</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>No</td>
+<td>event name</td>
+</tr>
+<tr>
+<td>description</td>
+<td>No</td>
+<td>event description</td>
+</tr>
+<tr>
+<td>time</td>
+<td>No</td>
+<td>event host time, eg: 2017-01-17 15:00:00</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>No</td>
+<td>event duration (unit: hours), eg: 72</td>
+</tr>
+<tr>
+<td>fee</td>
+<td>No</td>
+<td>event fee (unit: HKD)</td>
+</tr>
+<tr>
+<td>status</td>
+<td>No</td>
+<td>event status, one of the [&ldquo;cancelled&rdquo;, &ldquo;upcoming&rdquo;, &ldquo;past&rdquo;, &ldquo;proposed&rdquo;, &ldquo;suggested&rdquo;, &ldquo;draft&rdquo;]</td>
+</tr>
+</tbody></table>
+
+<h2 id="delete-member-event">DELETE Member Event</h2>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883524c73fa4b1ad8ba12da"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:24:09.714Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:21:32.234Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saturday, January 21st 2017, 3:00:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 999,999"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352ca73fa4b1ad8ba12dc"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e373fa4b1ad8ba12dd"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/86ccab857a3872fb626b775a8491ea81.png"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352e973fa4b1ad8ba12de"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/6b02ea3964b1b92e9037e7d074dc31ba.png"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588358473a100c1890130d1d"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:47:03.792Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:47:03.792Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tuesday, January 17th 2017, 11:24:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 1,000"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint delete event of the member</p>
+
+<h3 id="http-delete-request">HTTP DELETE Request</h3>
+
+<p><code class="prettyprint">DELETE /members/:member_id/events/:event_id</code></p>
+
+<h3 id="delete-parameters">DELETE Parameters</h3>
+
+<p>No parameters require.</p>
+
+<h2 id="post-event-photo">POST Event photo</h2>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883524c73fa4b1ad8ba12da"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T13:03:01.096Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:21:32.234Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saturday, January 21st 2017, 3:00:00 pm"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 999,999"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352ca73fa4b1ad8ba12dc"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835be3db4fc3174cbe465e"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/d85da9a72958a4efa058dd38c685b6ef_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/d85da9a72958a4efa058dd38c685b6ef.png"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835c04db4fc3174cbe465f"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f6561293d12cb561dd526e95d7438b20_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f6561293d12cb561dd526e95d7438b20.png"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835c05db4fc3174cbe4660"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/721809a805de717090b243d6aaf477ed_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/721809a805de717090b243d6aaf477ed.png"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint post photo to the event</p>
+
+<h3 id="http-post-request">HTTP POST Request</h3>
+
+<p><code class="prettyprint">POST /events/:event_id/photos</code></p>
+
+<h3 id="post-parameters">POST Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Optional</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>photo</td>
+<td>No</td>
+<td>image data</td>
+</tr>
+<tr>
+<td>width</td>
+<td>Yes</td>
+<td>image width</td>
+</tr>
+<tr>
+<td>height</td>
+<td>Yes</td>
+<td>image height</td>
+</tr>
+</tbody></table>
+
+<h2 id="delete-event-photo">DELETE Event photo</h2>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883524c73fa4b1ad8ba12da"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T13:02:41.093Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:21:32.234Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saturday, January 21st 2017, 3:00:00 pm"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 999,999"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588352ca73fa4b1ad8ba12dc"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835be3db4fc3174cbe465e"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/d85da9a72958a4efa058dd38c685b6ef_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/d85da9a72958a4efa058dd38c685b6ef.png"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint delete photo of the event</p>
+
+<h3 id="http-delete-request">HTTP DELETE Request</h3>
+
+<p><code class="prettyprint">DELETE /events/:event_id/photos/:photo_id</code></p>
+
+<h3 id="delete-parameters">DELETE Parameters</h3>
+
+<p>No parameters require.</p>
+
+<h2 id="post-event-venue">POST Event venue</h2>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883524c73fa4b1ad8ba12da"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T13:03:41.859Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:21:32.234Z"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saturday, January 21st 2017, 3:00:00 pm"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 999,999"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835c2ddb4fc3174cbe4661"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835be3db4fc3174cbe465e"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/d85da9a72958a4efa058dd38c685b6ef_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/d85da9a72958a4efa058dd38c685b6ef.png"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835c04db4fc3174cbe465f"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f6561293d12cb561dd526e95d7438b20_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f6561293d12cb561dd526e95d7438b20.png"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835c05db4fc3174cbe4660"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/721809a805de717090b243d6aaf477ed_320_240.png"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/721809a805de717090b243d6aaf477ed.png"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint post venue to the event</p>
+
+<h3 id="http-post-request">HTTP POST Request</h3>
+
+<p><code class="prettyprint">POST /events/:event_id/venues</code></p>
+
+<h3 id="post-parameters">POST Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Optional</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>No</td>
+<td>Venue name</td>
+</tr>
+<tr>
+<td>address1</td>
+<td>No</td>
+<td>Venue address line 1</td>
+</tr>
+<tr>
+<td>address2</td>
+<td>Yes</td>
+<td>Venue address line 2</td>
+</tr>
+<tr>
+<td>address3</td>
+<td>Yes</td>
+<td>Venue address line 3</td>
+</tr>
+<tr>
+<td>city</td>
+<td>Yes</td>
+<td>Venue city</td>
+</tr>
+<tr>
+<td>country</td>
+<td>Yes</td>
+<td>Venue country</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>Yes</td>
+<td>Venue phone</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-all-events">GET all Events</h2>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5882df391b50af2bcc7fc36a"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T11:49:49.391Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T04:10:33.255Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tuesday, January 17th 2017, 11:24:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 1,000"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834add2015980448acebf0"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58825a05304a6a25a85f5abc"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5882f6763b40021aa853e78c"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/5a869370c6b9be76f245e2bbef21154c_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/5a869370c6b9be76f245e2bbef21154c.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"屎劣, 屎昨 4123 @@! &lt;script&gt;alert('asdas')&lt;/script&gt;"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5882f5d73b40021aa853e789"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/a69845299f4aef26c65d9fd9dc51fabf_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/a69845299f4aef26c65d9fd9dc51fabf.png"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5882f5d93b40021aa853e78a"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/13833fe67641d25a22df50885a76ddf9_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/13833fe67641d25a22df50885a76ddf9.png"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5882f5da3b40021aa853e78b"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/a903b505ee06beb78787c1de8bc4abac_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/a903b505ee06beb78787c1de8bc4abac.png"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588347b991a1fd21200ecb72"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/8c8618cd771338e43332ef4a2a88d51c_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/8c8618cd771338e43332ef4a2a88d51c.png"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5882df6a1b50af2bcc7fc36d"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T04:11:22.445Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T04:11:22.445Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tuesday, January 17th 2017, 11:24:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 1,000"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58825a05304a6a25a85f5abc"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5882f6763b40021aa853e78c"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/5a869370c6b9be76f245e2bbef21154c_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/5a869370c6b9be76f245e2bbef21154c.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"屎劣, 屎昨 4123 @@! &lt;script&gt;alert('asdas')&lt;/script&gt;"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5883524c73fa4b1ad8ba12da"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T13:03:41.859Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:21:32.234Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Saturday, January 21st 2017, 3:00:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 999,999"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"venue"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835c2ddb4fc3174cbe4661"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling asd"</span><span class="p">,</span><span class="w">
+                    </span><span class="nt">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fanling"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835be3db4fc3174cbe465e"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/d85da9a72958a4efa058dd38c685b6ef_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/d85da9a72958a4efa058dd38c685b6ef.png"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835c04db4fc3174cbe465f"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f6561293d12cb561dd526e95d7438b20_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/f6561293d12cb561dd526e95d7438b20.png"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58835c05db4fc3174cbe4660"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/721809a805de717090b243d6aaf477ed_320_240.png"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/721809a805de717090b243d6aaf477ed.png"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588358473a100c1890130d1d"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:47:03.792Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-21T12:47:03.792Z"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf event123123123"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wtf description"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tuesday, January 17th 2017, 11:24:00 pm"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3 days"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"fee"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HKD 1,000"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proposed"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"__v"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"eventHosts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58834eb673fa4b1ad8ba12d7"</span><span class="p">,</span><span class="w">
+                        </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"杯地灶1"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                                </span><span class="nt">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"588350cf73fa4b1ad8ba12d9"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"photoURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf_320_240.png"</span><span class="p">,</span><span class="w">
+                                </span><span class="nt">"highresURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:3000/uploads/274c017eab8529dc1b072ba765342baf.png"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasdqweqwe"</span><span class="p">,</span><span class="w">
+                            </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nt">"photos"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint post venue to the event</p>
+
+<h3 id="http-get-request">HTTP GET Request</h3>
+
+<p><code class="prettyprint">GET /events/find</code></p>
+
+<h3 id="get-parameters">GET Parameters</h3>
+
+<p>No parameters require.</p>
 
           <h1 id="errors">Errors</h1>
 

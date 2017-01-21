@@ -362,15 +362,30 @@ exports.postEventPhoto = (req, res) => {
                 if (err) console.log(err);
                 if (!savedEvent) return res.json(apiOutputTemplate("error", `savedEvent is undefined`));
 
-                Photo.populate(savedEvent, {
-                    path: "photos",
-                    select: "photoURL highresURL"
-                }, (err, populatedSavedEvent) => {
-                    if (err) console.log(err);
-                    if (!savedEvent) return res.json(apiOutputTemplate("error", `populatedSavedEvent is undefined`));
+                Event.populate(savedEvent, [{
+                        path: "eventHosts",
+                        model: "User",
+                        select: "profile.name profile.gender profile.location profile.avatar",
+                        populate: {
+                            path: "profile.avatar",
+                            model: "Photo",
+                            select: "photoURL highresURL"
+                        }
+                    }, {
+                        path: "photos",
+                        model: "Photo",
+                        select: "photoURL highresURL"
+                    }, {
+                        path: "venue",
+                        model: "Venue",
+                        select: "name address1 address2 address3 city country phone"
+                    }]
+                    , (err, populatedSavedEvent) => {
+                        if (err) console.log(err);
+                        if (!populatedSavedEvent) return res.json(apiOutputTemplate("error", `populatedSavedEvent is undefined`));
 
-                    return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
-                });
+                        return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
+                    });
             });
         });
     });
@@ -393,15 +408,30 @@ exports.deleteEventPhoto = (req, res) => {
             foundEvent.save((err, savedEvent) => {
                 if (err) console.log(err);
 
-                Photo.populate(savedEvent, {
-                    path: "photos",
-                    select: "photoURL highresURL"
-                }, (err, populatedSavedEvent) => {
-                    if (err) console.log(err);
-                    if (!savedEvent) return res.json(apiOutputTemplate("error", `populatedSavedEvent is undefined`));
+                Event.populate(savedEvent, [{
+                        path: "eventHosts",
+                        model: "User",
+                        select: "profile.name profile.gender profile.location profile.avatar",
+                        populate: {
+                            path: "profile.avatar",
+                            model: "Photo",
+                            select: "photoURL highresURL"
+                        }
+                    }, {
+                        path: "photos",
+                        model: "Photo",
+                        select: "photoURL highresURL"
+                    }, {
+                        path: "venue",
+                        model: "Venue",
+                        select: "name address1 address2 address3 city country phone"
+                    }]
+                    , (err, populatedSavedEvent) => {
+                        if (err) console.log(err);
+                        if (!populatedSavedEvent) return res.json(apiOutputTemplate("error", `populatedSavedEvent is undefined`));
 
-                    return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
-                });
+                        return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
+                    });
             });
         });
     });
@@ -442,15 +472,30 @@ exports.getMemberEvent = (req, res) => {
         if (err) console.log(err);
         if (!foundEvent) return res.json(apiOutputTemplate("error", `${req.params.event_id} is not found`));
 
-        Photo.populate(foundEvent, {
-            path: "photos",
-            select: "photoURL highresURL"
-        }, (err, populatedEvent) => {
-            if (err) console.log(err);
-            if (!populatedEvent) return res.json(apiOutputTemplate("error", `populatedEvent is undefined`));
+        Event.populate(foundEvent, [{
+                path: "eventHosts",
+                model: "User",
+                select: "profile.name profile.gender profile.location profile.avatar",
+                populate: {
+                    path: "profile.avatar",
+                    model: "Photo",
+                    select: "photoURL highresURL"
+                }
+            }, {
+                path: "photos",
+                model: "Photo",
+                select: "photoURL highresURL"
+            }, {
+                path: "venue",
+                model: "Venue",
+                select: "name address1 address2 address3 city country phone"
+            }]
+            , (err, populatedFoundEvent) => {
+                if (err) console.log(err);
+                if (!populatedFoundEvent) return res.json(apiOutputTemplate("error", `populatedFoundEvent is undefined`));
 
-            return res.json(apiOutputTemplate("success", 'success', {events: populatedEvent}));
-        });
+                return res.json(apiOutputTemplate("success", 'success', {events: populatedFoundEvent}));
+            });
     });
 };
 
@@ -535,7 +580,25 @@ exports.postMemberEvent = (req, res) => {
                 if (!savedUser) return res.json(apiOutputTemplate("error", `savedUser is undefined`));
 
                 Event.populate(savedUser, {
-                    path: "events"
+                    path: "events",
+                    populate: [{
+                        path: "eventHosts",
+                        model: "User",
+                        select: "profile.name profile.gender profile.location profile.avatar",
+                        populate: {
+                            path: "profile.avatar",
+                            model: "Photo",
+                            select: "photoURL highresURL"
+                        }
+                    }, {
+                        path: "photos",
+                        model: "Photo",
+                        select: "photoURL highresURL"
+                    }, {
+                        path: "venue",
+                        model: "Venue",
+                        select: "name address1 address2 address3 city country phone"
+                    }]
                 }, (err, populatedSavedUser) => {
                     if (err) console.log(err);
                     if (!populatedSavedUser) return res.json(apiOutputTemplate("error", `populatedSavedUser is undefined`));
@@ -617,15 +680,30 @@ exports.patchMemberEvent = (req, res) => {
                 if (err) console.log(err);
                 if (!savedEvent) return res.json(apiOutputTemplate("error", `savedEvent is undefined`));
 
-                Photo.populate(savedEvent, {
-                    path: "photos",
-                    select: "photoURL highresURL"
-                }, (err, populatedSavedEvent) => {
-                    if (err) console.log(err);
-                    if (!savedEvent) return res.json(apiOutputTemplate("error", `populatedSavedEvent is undefined`));
+                Event.populate(savedEvent, [{
+                        path: "eventHosts",
+                        model: "User",
+                        select: "profile.name profile.gender profile.location profile.avatar",
+                        populate: {
+                            path: "profile.avatar",
+                            model: "Photo",
+                            select: "photoURL highresURL"
+                        }
+                    }, {
+                        path: "photos",
+                        model: "Photo",
+                        select: "photoURL highresURL"
+                    }, {
+                        path: "venue",
+                        model: "Venue",
+                        select: "name address1 address2 address3 city country phone"
+                    }]
+                    , (err, populatedSavedEvent) => {
+                        if (err) console.log(err);
+                        if (!populatedSavedEvent) return res.json(apiOutputTemplate("error", `populatedSavedEvent is undefined`));
 
-                    return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
-                });
+                        return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedEvent}));
+                    });
             });
         });
     });
@@ -652,12 +730,30 @@ exports.deleteMemberEvent = (req, res) => {
                     if (!removedFoundEvent) return res.json(apiOutputTemplate("error", `removedFoundEvent is undefined`));
 
                     Event.populate(savedFoundUser, {
-                        path: "events"
-                    }, (err, populatedSavedFoundUser) => {
+                        path: "events",
+                        populate: [{
+                            path: "eventHosts",
+                            model: "User",
+                            select: "profile.name profile.gender profile.location profile.avatar",
+                            populate: {
+                                path: "profile.avatar",
+                                model: "Photo",
+                                select: "photoURL highresURL"
+                            }
+                        }, {
+                            path: "photos",
+                            model: "Photo",
+                            select: "photoURL highresURL"
+                        }, {
+                            path: "venue",
+                            model: "Venue",
+                            select: "name address1 address2 address3 city country phone"
+                        }]
+                    }, (err, populatedSavedUser) => {
                         if (err) console.log(err);
-                        if (!populatedSavedFoundUser) return res.json(apiOutputTemplate("error", `populatedSavedFoundUser is undefined`));
+                        if (!populatedSavedUser) return res.json(apiOutputTemplate("error", `populatedSavedUser is undefined`));
 
-                        return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedFoundUser.events}));
+                        return res.json(apiOutputTemplate("success", 'success', {events: populatedSavedUser.events}));
                     });
                 });
             });
