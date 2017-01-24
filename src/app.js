@@ -170,7 +170,7 @@ api.delete('/members/:member_id/events/:event_id', passport.authenticate('jwt', 
 
 api.post('/events/:event_id/venues', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventVenue);
 
-api.get('/events/find', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.getEventsFind);
+api.get('/events/find', apiController.getEventsFind);
 
 
 api.get("/test", apiController.test);
