@@ -8937,3 +8937,8 @@ textarea {
 
 .fa {
   margin-right: 6px; }
+
+.homePageLandingText {
+  background: #ed1c40;
+  color: #fff;
+  text-align: center; }
