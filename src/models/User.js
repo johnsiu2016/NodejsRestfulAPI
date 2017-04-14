@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
 
     events: [{ // The event venue, present only if selected and not hidden by an organizer
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Photo"
+        ref: "Event"
     }],
 
 }, {timestamps: true});

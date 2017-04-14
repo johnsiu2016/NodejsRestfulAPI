@@ -21,6 +21,19 @@ const eventSchema = new mongoose.Schema({
     fee: String, // Ticketing fee information for events that support payments
     status: String, // "cancelled", "upcoming", "past", "proposed", "suggested", or "draft"
 
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "EventComment"
+    }],
+    attendance: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "EventAttendance"
+    },
+    rating: {
+        overall: Number,
+        count: Number
+    }
+
 }, {timestamps: true});
 
 eventSchema.path('photos').validate(mongoFieldUpperLimitValidation(8), "{PATH} exceeds the limit of 8");
