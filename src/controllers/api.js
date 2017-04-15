@@ -462,7 +462,26 @@ exports.getMemberEventsList = (req, res) => {
 		}, {
 			path: 'attendance.member',
 			model: 'User',
-			select: 'profile.name profile.gender'
+			select: 'profile.name profile.gender profile.avatar',
+			populate: {
+				path: "profile.avatar",
+				model: "Photo",
+				select: "photoURL highresURL"
+			}
+		}, {
+			path: 'comments',
+			model: 'EventComment',
+			select: 'title comment member createdAt',
+			populate: {
+				path: "member",
+				model: "User",
+				select: "profile.name profile.gender profile.avatar",
+				populate: {
+					path: "profile.avatar",
+					model: "Photo",
+					select: "photoURL highresURL"
+				}
+			}
 		}]
 	}, (err, populatedUser) => {
 		if (err) console.log(err);
@@ -497,7 +516,26 @@ exports.getMemberEvent = (req, res) => {
 			}, {
 				path: 'attendance.member',
 				model: 'User',
-				select: 'profile.name profile.gender'
+				select: 'profile.name profile.gender profile.avatar',
+				populate: {
+					path: "profile.avatar",
+					model: "Photo",
+					select: "photoURL highresURL"
+				}
+			}, {
+				path: 'comments',
+				model: 'EventComment',
+				select: 'title comment member createdAt',
+				populate: {
+					path: "member",
+					model: "User",
+					select: "profile.name profile.gender profile.avatar",
+					populate: {
+						path: "profile.avatar",
+						model: "Photo",
+						select: "photoURL highresURL"
+					}
+				}
 			}]
 			, (err, populatedFoundEvent) => {
 				if (err) console.log(err);
@@ -949,6 +987,71 @@ exports.postEventAttendance = (req, res) => {
 	});
 };
 
+exports.postEventComment = (req, res) => {
+	let validationSchema = {
+		"title": {
+			optional: true,
+			isLength: {
+				options: [{max: 100}],
+				errorMessage: "The length of title should not exceed 100 characters."
+			},
+			errorMessage: "Title is required."
+		},
+		"comment": {
+			notEmpty: true,
+			isLength: {
+				options: [{max: 300}],
+				errorMessage: "The length of name should not exceed 300 characters."
+			},
+			errorMessage: "Comment is required."
+		},
+	};
+
+	req.checkBody(validationSchema);
+	req.getValidationResult().then(function (result) {
+		let errors = result.array();
+		if (!result.isEmpty()) {
+			return res.json(apiOutputTemplate("error", errors));
+		}
+		req.sanitize('title').escape();
+		req.sanitize('title').trim();
+		req.sanitize('comment').escape();
+		req.sanitize('comment').trim();
+
+		Event.findById(req.params.event_id, (err, foundEvent) => {
+			if (err) console.log(err);
+			if (!foundEvent)
+				return res.json(apiOutputTemplate("error", `foundEvent is undefined`));
+
+			let body = req.body;
+			let comment = new EventComment({
+				title: body.title,
+				comment: body.comment,
+				member: req.user.id
+			});
+			comment.save((err, savedComment) => {
+				if (err) console.log(err);
+				if (!savedComment)
+					return res.json(apiOutputTemplate('error', `savedComment is undefined`));
+
+				foundEvent.comments.push(savedComment.id);
+				foundEvent.save((err, savedFoundEvent) => {
+					if (err) console.log(err);
+					if (!savedFoundEvent) return res.json(apiOutputTemplate("error", `savedFoundEvent is undefined`));
+
+					return res.json(apiOutputTemplate("success", 'success', {
+						eventId: savedFoundEvent.id,
+						commentId: savedComment.id
+					}));
+				});
+
+			});
+
+		});
+
+	});
+};
+
 exports.getEventsFind = (req, res) => {
 	Event.find({}).populate([{
 		path: "eventHosts",
@@ -970,7 +1073,26 @@ exports.getEventsFind = (req, res) => {
 	}, {
 		path: 'attendance.member',
 		model: 'User',
-		select: 'profile.name profile.gender'
+		select: 'profile.name profile.gender profile.avatar',
+		populate: {
+			path: "profile.avatar",
+			model: "Photo",
+			select: "photoURL highresURL"
+		}
+	}, {
+		path: 'comments',
+		model: 'EventComment',
+		select: 'title comment member createdAt',
+		populate: {
+			path: "member",
+			model: "User",
+			select: "profile.name profile.gender profile.avatar",
+			populate: {
+				path: "profile.avatar",
+				model: "Photo",
+				select: "photoURL highresURL"
+			}
+		}
 	}]).exec((err, foundEvents) => {
 		if (err) console.log(err);
 		if (!foundEvents) return res.json(apiOutputTemplate("error", `foundEvents is undefined`));

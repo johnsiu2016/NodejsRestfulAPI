@@ -12,6 +12,6 @@ const eventRatingSchema = new mongoose.Schema({
 	}
 }, {timestamps: true});
 
-const eventRating = mongoose.model('eventRating', eventRatingSchema);
+const eventRating = mongoose.model('EventRating', eventRatingSchema);
 
 module.exports = eventRating;

@@ -9,6 +9,6 @@ const eventCommentSchema = new mongoose.Schema({
 	}
 }, {timestamps: true});
 
-const eventComment = mongoose.model('eventComment', eventCommentSchema);
+const eventComment = mongoose.model('EventComment', eventCommentSchema);
 
 module.exports = eventComment;
