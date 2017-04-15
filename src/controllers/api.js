@@ -1052,6 +1052,79 @@ exports.postEventComment = (req, res) => {
 	});
 };
 
+exports.postEventRating = (req, res) => {
+	let validationSchema = {
+		"rating": {
+			notEmpty: true,
+			isIn: {
+				options: [[1, 2, 3, 4, 5]],
+				errorMessage: `rating should only be one of the [${[1, 2, 3, 4, 5].toString()}]`
+			}
+		}
+	};
+
+	req.checkBody(validationSchema);
+	req.getValidationResult().then(function (result) {
+		let errors = result.array();
+		if (!result.isEmpty()) {
+			return res.json(apiOutputTemplate("error", errors));
+		}
+
+		EventRating.find({eventId: req.params.event_id, member: req.user.id}, (err, foundEventRatings) => {
+			if (err) console.log(err);
+
+			if (foundEventRatings.length !== 0)
+				return res.json(apiOutputTemplate("error", `You have already rated to this event.`));
+
+			Event.findById(req.params.event_id, (err, foundEvent) => {
+				if (err) console.log(err);
+				if (!foundEvent)
+					return res.json(apiOutputTemplate("error", `foundEvent is undefined`));
+
+				let body = req.body;
+				let rating = new EventRating({
+					eventId: foundEvent.id,
+					rating: body.rating,
+					member: req.user.id
+				});
+				rating.save((err, savedRating) => {
+					if (err) console.log(err);
+					if (!savedRating)
+						return res.json(apiOutputTemplate('error', `savedRating is undefined`));
+
+					EventRating.find({eventId: foundEvent.id}, (err, foundEventRatings) => {
+						if (err) console.log(err);
+						if (!savedRating)
+							return res.json(apiOutputTemplate('error', `foundEventRatings is undefined`));
+
+						let count = foundEventRatings.length;
+						let overall = foundEventRatings
+								.map(ele => ele.rating)
+								.reduce((acc, rating) => acc + rating)
+							/ count;
+
+						foundEvent.rating.count = count;
+						foundEvent.rating.overall = Math.round(overall * 10) / 10;
+
+						foundEvent.save((err, savedFoundEvent) => {
+							if (err) console.log(err);
+							if (!savedRating)
+								return res.json(apiOutputTemplate('error', `savedFoundEvent is undefined`));
+
+							return res.json(apiOutputTemplate("success", 'success', {
+								rating: {
+									count: savedFoundEvent.rating.count,
+									overall: savedFoundEvent.rating.overall
+								}
+							}));
+						});
+					});
+				});
+			});
+		});
+	});
+};
+
 exports.getEventsFind = (req, res) => {
 	Event.find({}).populate([{
 		path: "eventHosts",
