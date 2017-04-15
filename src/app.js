@@ -169,6 +169,8 @@ api.patch('/members/:member_id/events/:event_id', passport.authenticate('jwt', {
 api.delete('/members/:member_id/events/:event_id', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.deleteMemberEvent);
 
 api.post('/events/:event_id/venues', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventVenue);
+api.post('/events/:event_id/attendance', passport.authenticate('jwt', {failWithError: true, session: false}), apiController.postEventAttendance);
+
 
 api.get('/events/find', apiController.getEventsFind);
 

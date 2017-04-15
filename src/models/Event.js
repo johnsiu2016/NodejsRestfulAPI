@@ -25,10 +25,17 @@ const eventSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "EventComment"
     }],
-    attendance: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "EventAttendance"
-    },
+    attendance: [{
+	    member: {
+		    type: mongoose.Schema.Types.ObjectId,
+		    ref: "User"
+	    },
+	    joinedDate: {
+	    	type: Date,
+		    default: Date.now
+	    },
+	    _id: false
+    }],
     rating: {
         overall: Number,
         count: Number
