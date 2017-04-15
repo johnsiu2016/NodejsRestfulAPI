@@ -3,8 +3,10 @@
   "description": "App Server Proj1",
   "author": "John",
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "mocha --reporter spec"
+    "start": "NODE_ENV=production node index.js",
+    "start:dev": "nodemon index.js",
+    "test": "mocha --reporter spec",
+    "build": "babel src --out-dir build && babel src --out-dir build --copy-files"
   },
   "dependencies": {
     "async": "^2.1.2",
