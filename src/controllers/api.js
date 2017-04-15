@@ -145,15 +145,25 @@ exports.postLogin = (req, res) => {
 
 // Get Account Profile
 exports.getMemberProfile = (req, res) => {
-	Photo.populate(req.user, {
+	Photo.populate(req.user, [{
 		path: "profile.photos profile.avatar",
 		select: "photoURL highresURL"
-	}, (err, populatedUser) => {
+	}, {
+		path: "events",
+		model: "Event",
+		select: "name description time duration fee status"
+	}, {
+		path: "joinedEvents",
+		model: "Event",
+		select: "name description time duration fee status"
+	}], (err, populatedUser) => {
 		if (err) return res.json(apiOutputTemplate("error", err.errors));
 
 		return res.json(apiOutputTemplate("success", 'success', {
 			email: req.user.email,
-			profile: populatedUser.profile
+			profile: populatedUser.profile,
+			events: populatedUser.events,
+			joinedEvents: populatedUser.joinedEvents
 		}));
 	});
 };
@@ -609,8 +619,8 @@ exports.postMemberEvent = (req, res) => {
 		let event = new Event({
 			name: body.name,
 			description: body.description,
-			time: moment(req.body.time).format("dddd, MMMM Do YYYY, h:mm:ss a"),
-			duration: myUtil.processTimeDuration(body.duration),
+			time: moment(req.body.time).unix(),
+			duration: moment.duration(Number(body.duration), 'hours').asSeconds(),
 			eventHosts: [user._id],
 			fee: numeral(body.fee).format('$0,0'),
 			status: body.status
@@ -717,8 +727,8 @@ exports.patchMemberEvent = (req, res) => {
 			let body = req.body;
 			foundEvent.name = body.name;
 			foundEvent.description = body.description;
-			foundEvent.time = moment(req.body.time).format("dddd, MMMM Do YYYY, h:mm:ss a");
-			foundEvent.duration = myUtil.processTimeDuration(body.duration);
+			foundEvent.time = moment(req.body.time).unix();
+			foundEvent.duration = moment.duration(Number(body.duration), 'hours').asSeconds();
 			foundEvent.fee = numeral(body.fee).format('$0,0');
 			foundEvent.status = body.status;
 			foundEvent.save((err, savedEvent) => {
