@@ -997,6 +997,46 @@ exports.postEventAttendance = (req, res) => {
 	});
 };
 
+exports.deleteEventAttendance = (req, res) => {
+	Event.findById(req.params.event_id, (err, foundEvent) => {
+		if (err) console.log(err);
+		if (!foundEvent)
+			return res.json(apiOutputTemplate("error", `foundEvent is undefined`));
+
+		if (foundEvent.attendance.map(ele => ele.member.toString()).indexOf(req.user.id) === -1)
+			return res.json(apiOutputTemplate("error", `You did not join the event yet.`));
+
+		foundEvent.attendance = foundEvent.attendance.filter(attendance => String(attendance.member) !== req.user.id);
+		foundEvent.save((err, savedFoundEvent) => {
+			if (err) console.log(err);
+			if (!savedFoundEvent)
+				return res.json(apiOutputTemplate("error", `savedFoundEvent is undefined`));
+
+			User.findById(req.user.id, (err, foundUser) => {
+				if (err) console.log(err);
+				if (!foundUser)
+					return res.json(apiOutputTemplate("error", `foundUser is undefined`));
+
+				// because of updated scheme
+				if (!foundUser.joinedEvents)
+					foundUser.joinedEvents = [];
+				// because of updated scheme
+				foundUser.joinedEvents = foundUser.joinedEvents.filter(joinedEvent => String(joinedEvent) !== foundEvent.id);
+				foundUser.save((err, savedFoundUser) => {
+					if (err) console.log(err);
+					if (!savedFoundUser)
+						return res.json(apiOutputTemplate("error", `savedFoundUser is undefined`));
+
+					return res.json(apiOutputTemplate("success", 'success', {
+						eventId: savedFoundEvent.id,
+						userId: savedFoundUser.id
+					}));
+				});
+			});
+		});
+	});
+};
+
 exports.postEventComment = (req, res) => {
 	let validationSchema = {
 		"title": {
