@@ -1,0 +1,33 @@
+extends layout
+
+block content
+    .container.adminSectionTitle
+        | All Accounts
+
+    table.dataTables
+        thead
+            tr
+                th Id
+                th email
+                th createdAt
+
+        tbody
+            each val in allUsers
+                tr
+                    th= val.id
+                    th= val.email
+                    th= val.createdAt
+
+    .adminSubSection
+        | Delete Account
+    form.form-horizontal(method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+            label(class='col-sm-2 control-label', for='id') id
+            .col-sm-8
+                input.form-control(type='text', name='id', id='id', autofocus=true)
+        .form-group
+            .col-sm-offset-2.col-sm-8
+                button.btn.btn-primary(type='submit')
+                    | Send
+

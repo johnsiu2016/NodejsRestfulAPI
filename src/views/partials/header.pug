@@ -21,6 +21,12 @@
                     a(href='/status') Status
                 li
                     a(href='/apidocs') API Docs
+
+                if user
+                    if String(user._id) == process.env.ADMIN
+                        li(class=(title == 'Admin Control Panel') ? 'active' : undefined)
+                            a(href='/admin') Admin
+
             ul.nav.navbar-nav.navbar-right
                 if !user
                     li(class=(title == 'Login') ? 'active' : undefined)
