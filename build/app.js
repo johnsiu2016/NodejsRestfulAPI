@@ -28,6 +28,7 @@ var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
+var adminController = require('./controllers/admin');
 
 /**
  * API keys and Passport configuration.
@@ -133,6 +134,11 @@ app.post('/account/password', passportConfig.isAuthenticated, userController.pos
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
+app.get('/admin', adminController.getAdmin);
+app.post('/admin/account/delete', adminController.postDeleteAccount);
+app.post('/admin/event/delete', adminController.postDeleteEvent);
+app.post('/admin/photo/delete', adminController.postDeletePhoto);
+
 /**
  * API examples routes.
  */
@@ -167,6 +173,7 @@ api.delete('/members/:member_id/events/:event_id', passport.authenticate('jwt', 
 
 api.post('/events/:event_id/venues', passport.authenticate('jwt', { failWithError: true, session: false }), apiController.postEventVenue);
 api.post('/events/:event_id/attendance', passport.authenticate('jwt', { failWithError: true, session: false }), apiController.postEventAttendance);
+api.delete('/events/:event_id/attendance', passport.authenticate('jwt', { failWithError: true, session: false }), apiController.deleteEventAttendance);
 api.post('/events/:event_id/comments', passport.authenticate('jwt', { failWithError: true, session: false }), apiController.postEventComment);
 api.post('/events/:event_id/ratings', passport.authenticate('jwt', { failWithError: true, session: false }), apiController.postEventRating);
 

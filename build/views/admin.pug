@@ -1,0 +1,94 @@
+extends layout
+
+block content
+    .container.adminSectionTitle
+        | All Accounts
+
+    table.dataTables
+        thead
+            tr
+                th Id
+                th Email
+                th CreatedAt
+
+        tbody
+            each val in allUsers
+                tr
+                    th= val.id
+                    th= val.email
+                    th= val.createdAt
+
+    .adminSubSection
+        | Delete Account
+    form.form-horizontal(action='/admin/account/delete', method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+            label(class='col-sm-2 control-label', for='account_id') id
+            .col-sm-8
+                input.form-control(type='text', name='id', id='account_id', autofocus=true)
+        .form-group
+            .col-sm-offset-2.col-sm-8
+                button.btn.btn-primary(type='submit')
+                    | Send
+
+
+    .container.adminSectionTitle
+        | All Events
+
+    table.dataTables
+        thead
+            tr
+                th Id
+                th Name
+                th CreatedAt
+
+        tbody
+            each val in allEvents
+                tr
+                    th= val.id
+                    th= val.name
+                    th= val.createdAt
+
+    .adminSubSection
+        | Delete Event
+    form.form-horizontal(action='/admin/event/delete', method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+            label(class='col-sm-2 control-label', for='event_id') id
+            .col-sm-8
+                input.form-control(type='text', name='id', id='event_id', autofocus=true)
+        .form-group
+            .col-sm-offset-2.col-sm-8
+                button.btn.btn-primary(type='submit')
+                    | Send
+
+
+    .container.adminSectionTitle
+        | All Photos
+
+    table.dataTables
+        thead
+            tr
+                th Id
+                th PhotoURL
+                th CreatedAt
+
+        tbody
+            each val in allPhotos
+                tr
+                    th= val.id
+                    th= val.photoURL
+                    th= val.createdAt
+
+    .adminSubSection
+        | Delete Photos
+    form.form-horizontal(action='/admin/photo/delete', method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+            label(class='col-sm-2 control-label', for='photo_id') id
+            .col-sm-8
+                input.form-control(type='text', name='id', id='photo_id', autofocus=true)
+        .form-group
+            .col-sm-offset-2.col-sm-8
+                button.btn.btn-primary(type='submit')
+                    | Send

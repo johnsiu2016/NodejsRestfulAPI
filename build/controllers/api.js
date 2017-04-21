@@ -146,15 +146,25 @@ exports.postLogin = function (req, res) {
 
 // Get Account Profile
 exports.getMemberProfile = function (req, res) {
-	Photo.populate(req.user, {
+	Photo.populate(req.user, [{
 		path: "profile.photos profile.avatar",
 		select: "photoURL highresURL"
-	}, function (err, populatedUser) {
+	}, {
+		path: "events",
+		model: "Event",
+		select: "name description time duration fee status"
+	}, {
+		path: "joinedEvents",
+		model: "Event",
+		select: "name description time duration fee status"
+	}], function (err, populatedUser) {
 		if (err) return res.json(apiOutputTemplate("error", err.errors));
 
 		return res.json(apiOutputTemplate("success", 'success', {
 			email: req.user.email,
-			profile: populatedUser.profile
+			profile: populatedUser.profile,
+			events: populatedUser.events,
+			joinedEvents: populatedUser.joinedEvents
 		}));
 	});
 };
@@ -610,8 +620,8 @@ exports.postMemberEvent = function (req, res) {
 		var event = new Event({
 			name: body.name,
 			description: body.description,
-			time: moment(req.body.time).format("dddd, MMMM Do YYYY, h:mm:ss a"),
-			duration: myUtil.processTimeDuration(body.duration),
+			time: moment(req.body.time).unix(),
+			duration: moment.duration(Number(body.duration), 'hours').asSeconds(),
 			eventHosts: [user._id],
 			fee: numeral(body.fee).format('$0,0'),
 			status: body.status
@@ -718,8 +728,8 @@ exports.patchMemberEvent = function (req, res) {
 			var body = req.body;
 			foundEvent.name = body.name;
 			foundEvent.description = body.description;
-			foundEvent.time = moment(req.body.time).format("dddd, MMMM Do YYYY, h:mm:ss a");
-			foundEvent.duration = myUtil.processTimeDuration(body.duration);
+			foundEvent.time = moment(req.body.time).unix();
+			foundEvent.duration = moment.duration(Number(body.duration), 'hours').asSeconds();
 			foundEvent.fee = numeral(body.fee).format('$0,0');
 			foundEvent.status = body.status;
 			foundEvent.save(function (err, savedEvent) {
@@ -971,6 +981,46 @@ exports.postEventAttendance = function (req, res) {
 				// because of updated scheme
 				foundUser.joinedEvents.push(foundEvent.id);
 
+				foundUser.save(function (err, savedFoundUser) {
+					if (err) console.log(err);
+					if (!savedFoundUser) return res.json(apiOutputTemplate("error", 'savedFoundUser is undefined'));
+
+					return res.json(apiOutputTemplate("success", 'success', {
+						eventId: savedFoundEvent.id,
+						userId: savedFoundUser.id
+					}));
+				});
+			});
+		});
+	});
+};
+
+exports.deleteEventAttendance = function (req, res) {
+	Event.findById(req.params.event_id, function (err, foundEvent) {
+		if (err) console.log(err);
+		if (!foundEvent) return res.json(apiOutputTemplate("error", 'foundEvent is undefined'));
+
+		if (foundEvent.attendance.map(function (ele) {
+			return ele.member.toString();
+		}).indexOf(req.user.id) === -1) return res.json(apiOutputTemplate("error", 'You did not join the event yet.'));
+
+		foundEvent.attendance = foundEvent.attendance.filter(function (attendance) {
+			return String(attendance.member) !== req.user.id;
+		});
+		foundEvent.save(function (err, savedFoundEvent) {
+			if (err) console.log(err);
+			if (!savedFoundEvent) return res.json(apiOutputTemplate("error", 'savedFoundEvent is undefined'));
+
+			User.findById(req.user.id, function (err, foundUser) {
+				if (err) console.log(err);
+				if (!foundUser) return res.json(apiOutputTemplate("error", 'foundUser is undefined'));
+
+				// because of updated scheme
+				if (!foundUser.joinedEvents) foundUser.joinedEvents = [];
+				// because of updated scheme
+				foundUser.joinedEvents = foundUser.joinedEvents.filter(function (joinedEvent) {
+					return String(joinedEvent) !== foundEvent.id;
+				});
 				foundUser.save(function (err, savedFoundUser) {
 					if (err) console.log(err);
 					if (!savedFoundUser) return res.json(apiOutputTemplate("error", 'savedFoundUser is undefined'));
