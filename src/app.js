@@ -137,7 +137,9 @@ app.post('/account/delete', passportConfig.isAuthenticated, userController.postD
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
 app.get('/admin', adminController.getAdmin);
-app.post('/admin', adminController.postAdmin);
+app.post('/admin/account/delete', adminController.postDeleteAccount);
+app.post('/admin/event/delete', adminController.postDeleteEvent);
+app.post('/admin/photo/delete', adminController.postDeletePhoto);
 
 /**
  * API examples routes.
